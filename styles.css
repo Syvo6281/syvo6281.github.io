@@ -57,6 +57,24 @@ body.capture-mode::before,
 body.capture-mode::after { display: none; }
 body.capture-mode .identity-rail { position: absolute; }
 
+/* Liquid inversion field: while a volume is dragged, a fluid blob trails the
+   pointer and flips the page to its negative via difference blend. Pointer-
+   transparent, idle-free, cleared entirely under reduced motion / capture. */
+#drag-field {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 91;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity .14s linear;
+  will-change: transform, opacity;
+}
+#drag-field.is-live { opacity: 1; }
+body.capture-mode #drag-field { display: none; }
+@media (hover: none) { #drag-field { display: none; } }
+
 ::selection { color: var(--black); background: var(--white); }
 * { scrollbar-color: var(--white) var(--black); scrollbar-width: thin; }
 a { color: inherit; text-underline-offset: .24em; }
@@ -209,8 +227,16 @@ h1 strong { font-weight: inherit; color: transparent; -webkit-text-stroke: 1.5px
   background: var(--black);
   overflow: hidden;
   isolation: isolate;
-  cursor: crosshair;
+  cursor: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
 }
+.ascii-volume :not(button):not(a),
+.kitchen-model-shell :not(button):not(a) { cursor: none; }
+/* While a volume drag is live the mass stands in for the pointer everywhere,
+   so the OS cursor stays hidden even when the drag travels off the element. */
+body.field-dragging, body.field-dragging * { cursor: none !important; }
 
 #ascii-mesh { position: absolute; inset: 0; width: 100%; height: 100%; }
 .volume-frame { position: absolute; inset: -.52rem; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; pointer-events: none; font-family: var(--mono); }
@@ -355,6 +381,8 @@ h1 strong { font-weight: inherit; color: transparent; -webkit-text-stroke: 1.5px
 .skill-axes button:last-child { border-right: 0; }
 .skill-axes button:hover, .skill-axes button.is-active { background: var(--black); color: var(--white); }
 .skill-axes button > span, .skill-axes code { font-family: var(--mono); font-size: .6rem; }
+.skill-axes .axis-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.axis-mark { width: 1.5rem; height: 1.5rem; flex: none; color: currentColor; }
 .skill-axes b { margin: 2rem 0 .8rem; font-family: var(--display); font-size: clamp(1.25rem, 2vw, 2rem); line-height: 1; text-transform: uppercase; }
 .skill-axes p { margin-bottom: 1.5rem; color: var(--dim-light); }
 .skill-axes button:hover p, .skill-axes button.is-active p { color: var(--dim-dark); }
@@ -366,7 +394,7 @@ h1 strong { font-weight: inherit; color: transparent; -webkit-text-stroke: 1.5px
 .kitchen-lead { display: grid; grid-template-columns: 1.25fr .75fr; gap: clamp(2rem, 5vw, 5rem); align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
 .kitchen-lead h2 { max-width: 13ch; margin: 0; font-family: var(--display); font-size: clamp(2.75rem, 6vw, 5.75rem); font-weight: 400; line-height: .92; letter-spacing: -.04em; text-transform: uppercase; }
 .kitchen-lead p { max-width: 38rem; color: var(--dim-dark); font-size: 1.05rem; }
-.kitchen-model-shell { position: relative; min-height: clamp(28rem, 40vw, 34rem); border: 1px solid var(--white); background: var(--black); overflow: hidden; cursor: crosshair; }
+.kitchen-model-shell { position: relative; min-height: clamp(28rem, 40vw, 34rem); border: 1px solid var(--white); background: var(--black); overflow: hidden; cursor: none; -webkit-user-select: none; user-select: none; touch-action: none; }
 #kitchen-3d-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .kitchen-model-status { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; gap: 1rem; padding: .65rem .8rem; border-bottom: 1px solid var(--white); background: var(--black); font-family: var(--mono); font-size: .6rem; }
 .kitchen-model-copy { position: absolute; top: 3.7rem; left: .8rem; width: min(24rem, 40%); font-family: var(--mono); font-size: .68rem; }

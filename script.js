@@ -256,9 +256,10 @@ function updatePointer(event) {
 
 volume.addEventListener("pointerdown", (event) => {
   if (event.target.closest("button, a")) return;
+  event.preventDefault();               // stop the drag becoming a text selection
   dragging = true;
   previousPointer = { x: event.clientX, y: event.clientY };
-  volume.setPointerCapture(event.pointerId);
+  try { volume.setPointerCapture(event.pointerId); } catch (_) {}
 });
 volume.addEventListener("pointermove", (event) => {
   if (!dragging) {
@@ -609,9 +610,10 @@ function animateKitchen(time) {
 
 kitchenStage.addEventListener("pointerdown", (event) => {
   if (event.target.closest("button, a")) return;
+  event.preventDefault();               // stop the drag becoming a text selection
   kitchenDragging = true;
   kitchenPointer = { x: event.clientX, y: event.clientY };
-  kitchenStage.setPointerCapture(event.pointerId);
+  try { kitchenStage.setPointerCapture(event.pointerId); } catch (_) {}
 });
 kitchenStage.addEventListener("pointermove", (event) => {
   if (!kitchenDragging) return;
@@ -656,3 +658,275 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("resize", () => drawKitchen(performance.now()));
 drawKitchen();
+
+/* ---------------------------------------------------------------------------
+   Liquid inversion field
+   A mercury-like mass of connected fluid nodes trails the pointer on a fixed
+   full-viewport canvas. Each node is a lobed opaque polygon; consecutive nodes
+   are bridged with a quad so the mass stays one continuous SOLID body, while
+   the trailing lag and the rim's noise warp make it read as LIQUID.
+   `mix-blend-mode: difference` turns everything it covers into the page's
+   photographic negative.
+   It follows the bare cursor at a small ambient size and swells while an ASCII
+   volume is dragged. It paints only while the pointer is moving (or during the
+   short dissipation once it stops); a resting cursor leaves no mark and the
+   canvas clears to zero cost.
+   Reduced motion: a hard inverted disc snaps to the pointer, no trail, no
+   ripple. Capture mode: the canvas is hidden by CSS and never armed.
+--------------------------------------------------------------------------- */
+(() => {
+  const field = document.querySelector("#drag-field");
+  if (!field) return;
+  const fieldCtx = field.getContext("2d");
+  // A fullscreen `difference`-blend canvas re-composites the page each frame;
+  // keep the backing store modest so that stays cheap.
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+  const NODES = 7;
+  const chain = [];            // {x,y} trail samples, head = pointer
+  // The mercury mass is speed-driven: a small bead when the cursor is slow or
+  // still, swelling toward R_MAX as it moves faster. A volume drag raises the
+  // floor so it stays substantial while you rotate.
+  const R_MIN = 30;
+  const R_DRAG_FLOOR = 150;
+  const R_MAX = 250;
+  const SPEED_TO_R = 6.5;      // px of radius per px/frame of pointer speed
+  let speedEMA = 0;            // smoothed pointer speed
+  const IDLE_HIDE = 900;       // ms of pointer stillness before it dissipates
+  let radius = 0, radiusTarget = 0;
+  let wob = Math.random() * 6.28;
+  let held = 0;                // volumes currently grabbed
+  let lastMoveAt = 0;
+  let raf = 0;
+  let running = false;
+  let seeded = false;
+
+  // The canvas is a compact roaming tile, not the whole viewport: only its own
+  // footprint pays the `difference` composite cost. It is repositioned each
+  // frame so it hugs the mass; drawing happens in tile-local coordinates.
+  const TILE = 840;                       // CSS px; chain span is clamped to fit
+  let tileX = 0, tileY = 0;               // tile's top-left in viewport CSS px
+  field.width = Math.round(TILE * dpr);
+  field.height = Math.round(TILE * dpr);
+  field.style.width = TILE + "px";
+  field.style.height = TILE + "px";
+  fieldCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  function seed(x, y) {
+    chain.length = 0;
+    for (let i = 0; i < NODES; i += 1) chain.push({ x, y });
+  }
+
+  function start() {
+    if (running) return;
+    running = true;
+    field.classList.add("is-live");
+    raf = requestAnimationFrame(tick);
+  }
+
+  function stop() {
+    running = false;
+    cancelAnimationFrame(raf);
+    field.classList.remove("is-live");
+    fieldCtx.clearRect(0, 0, TILE, TILE);
+  }
+
+  function metaball() {
+    // Recentre the tile on the mass's bounding box and park it via transform,
+    // clamped to the viewport so it never introduces scroll.
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    const rad = [];
+    for (let i = 0; i < chain.length; i += 1) {
+      const taper = 1 - (i / chain.length) * 0.62;
+      const swell = 1 + Math.sin(wob * 1.6 + i * 1.4) * 0.12;
+      const r = Math.max(5, radius * taper * swell);
+      rad[i] = r;
+      minX = Math.min(minX, chain[i].x - r);
+      minY = Math.min(minY, chain[i].y - r);
+      maxX = Math.max(maxX, chain[i].x + r);
+      maxY = Math.max(maxY, chain[i].y + r);
+    }
+    const cx = (minX + maxX) / 2;
+    const cy = (minY + maxY) / 2;
+    tileX = Math.round(cx - TILE / 2);
+    tileY = Math.round(cy - TILE / 2);
+    field.style.transform = `translate(${tileX}px, ${tileY}px)`;
+
+    // Full clear of the tile every frame — no residual trail. Draw in
+    // tile-local coordinates (viewport coord minus tile origin).
+    fieldCtx.clearRect(0, 0, TILE, TILE);
+    fieldCtx.fillStyle = "#fff";
+    const P = chain.map((n) => ({ x: n.x - tileX, y: n.y - tileY }));
+
+    // 1. Bridge consecutive nodes with a filled quad along the perpendicular
+    //    of the segment — keeps the mass a single continuous solid, no gaps
+    //    between lobes even at speed.
+    for (let i = 0; i < P.length - 1; i += 1) {
+      const a = P[i];
+      const b = P[i + 1];
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const nx = -dy / len;
+      const ny = dx / len;
+      fieldCtx.beginPath();
+      fieldCtx.moveTo(a.x + nx * rad[i], a.y + ny * rad[i]);
+      fieldCtx.lineTo(b.x + nx * rad[i + 1], b.y + ny * rad[i + 1]);
+      fieldCtx.lineTo(b.x - nx * rad[i + 1], b.y - ny * rad[i + 1]);
+      fieldCtx.lineTo(a.x - nx * rad[i], a.y - ny * rad[i]);
+      fieldCtx.closePath();
+      fieldCtx.fill();
+    }
+
+    // 2. A lobed opaque polygon at each node. Hard edge by construction; a
+    //    two-term noise warp on the rim is the liquid ripple. Solid body,
+    //    liquid boundary.
+    for (let i = 0; i < P.length; i += 1) {
+      const node = P[i];
+      const r = rad[i];
+      fieldCtx.beginPath();
+      const segs = 30;
+      for (let s = 0; s <= segs; s += 1) {
+        const ang = (s / segs) * 6.283185;
+        const warp = 1
+          + Math.sin(ang * 3 + wob * 2 + i) * 0.06
+          + Math.sin(ang * 6 - wob * 1.5 + i * 2) * 0.03;
+        const rr = r * warp;
+        const px = node.x + Math.cos(ang) * rr;
+        const py = node.y + Math.sin(ang) * rr;
+        if (s === 0) fieldCtx.moveTo(px, py);
+        else fieldCtx.lineTo(px, py);
+      }
+      fieldCtx.closePath();
+      fieldCtx.fill();
+    }
+  }
+
+  function tick() {
+    if (!running) return;
+
+    if (reducedMotion) {
+      // Static hard disc snapped to the pointer, no trail, no ripple.
+      fieldCtx.clearRect(0, 0, TILE, TILE);
+      if (radiusTarget > 0 && chain[0]) {
+        tileX = Math.round(chain[0].x - TILE / 2);
+        tileY = Math.round(chain[0].y - TILE / 2);
+        field.style.transform = `translate(${tileX}px, ${tileY}px)`;
+        fieldCtx.fillStyle = "#fff";
+        fieldCtx.beginPath();
+        fieldCtx.arc(TILE / 2, TILE / 2, R_DRAG_FLOOR, 0, 6.283185);
+        fieldCtx.fill();
+        raf = requestAnimationFrame(tick);
+      } else {
+        stop();
+      }
+      return;
+    }
+
+    // Each node chases the one ahead, and is clamped so the gap to its leader
+    // never exceeds a bound — the mass stretches under a fast drag but stays
+    // continuous AND stays within the roaming tile (no clip, no blob tearing).
+    const maxGap = Math.min(radius * 0.6, (TILE * 0.9) / chain.length);
+    for (let i = 1; i < chain.length; i += 1) {
+      const lead = chain[i - 1];
+      const node = chain[i];
+      node.x += (lead.x - node.x) * 0.42;
+      node.y += (lead.y - node.y) * 0.42;
+      const dx = node.x - lead.x;
+      const dy = node.y - lead.y;
+      const d = Math.hypot(dx, dy);
+      if (d > maxGap && d > 0) {
+        const pull = (d - maxGap) / d;
+        node.x -= dx * pull;
+        node.y -= dy * pull;
+      }
+    }
+    // Between pointer samples, bleed the smoothed speed toward zero so the
+    // mass shrinks the moment the cursor slows — size tracks live velocity.
+    speedEMA *= 0.86;
+    if (held === 0) {
+      const still = performance.now() - lastMoveAt;
+      if (still > IDLE_HIDE) radiusTarget = 0;
+      else radiusTarget = Math.max(R_MIN, Math.min(R_MIN + speedEMA * SPEED_TO_R, R_MAX));
+    }
+    radius += (radiusTarget - radius) * 0.16;
+    wob += 0.05;
+
+    if (radius > 1) {
+      metaball();
+      raf = requestAnimationFrame(tick);
+    } else {
+      stop();
+    }
+  }
+
+  // Pointer moved anywhere on the page: the mercury mass follows it, its size
+  // set by how fast the cursor is travelling.
+  function point(clientX, clientY, speed) {
+    lastMoveAt = performance.now();
+    if (!seeded || !running) {
+      seed(clientX, clientY);
+      seeded = true;
+      radius = radius > 1 ? radius : R_MIN;
+    }
+    chain[0].x = clientX;
+    chain[0].y = clientY;
+    speedEMA += ((speed || 0) - speedEMA) * 0.35;
+    const floor = held > 0 ? R_DRAG_FLOOR : R_MIN;
+    radiusTarget = Math.max(floor, Math.min(R_MIN + speedEMA * SPEED_TO_R, R_MAX));
+    start();
+  }
+  // A volume was grabbed / released: the mass swells while held, and the OS
+  // cursor is hidden page-wide so the mass alone stands in for the pointer.
+  function grab() {
+    held += 1;
+    document.body.classList.add("field-dragging");
+  }
+  function release() {
+    held = Math.max(0, held - 1);
+    if (held === 0) {
+      radiusTarget = R_MIN;
+      document.body.classList.remove("field-dragging");
+    }
+  }
+
+  window.__dragField = { point, grab, release };
+
+  // Ambient driver: every pointer move on the document feeds the mass.
+  let last = null;
+  window.addEventListener("pointermove", (event) => {
+    if (event.pointerType === "touch") return; // touch drives via volume only
+    const speed = last ? Math.hypot(event.clientX - last.x, event.clientY - last.y) : 0;
+    last = { x: event.clientX, y: event.clientY };
+    point(event.clientX, event.clientY, speed);
+  }, { passive: true });
+})();
+
+// A volume drag swells the mass; the ambient driver already tracks position.
+(() => {
+  const f = window.__dragField;
+  if (!f) return;
+
+  function bind(el) {
+    if (!el) return;
+    let active = false;
+    const start = (event) => {
+      if (event.target.closest("button, a") || event.pointerType === "touch") return;
+      active = true;
+      f.grab();
+      f.point(event.clientX, event.clientY, 0);
+    };
+    const end = () => { if (active) { active = false; f.release(); } };
+    el.addEventListener("pointerdown", start);
+    el.addEventListener("pointermove", (event) => {
+      if (event.pointerType === "touch" || !active) return;
+      f.point(event.clientX, event.clientY, 0);
+    });
+    el.addEventListener("pointerup", end);
+    el.addEventListener("pointercancel", end);
+    el.addEventListener("lostpointercapture", end);
+  }
+
+  bind(document.querySelector(".ascii-volume"));
+  bind(document.querySelector(".kitchen-model-shell"));
+})();
