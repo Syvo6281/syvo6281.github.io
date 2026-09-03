@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Sahil Pohare builds distributed systems, AI infrastructure, and production software on radically efficient foundations." />
+    <meta name="theme-color" content="#050505" />
+    <title>Sahil Pohare — Systems that route around constraints</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23050505'/%3E%3Ctext x='8' y='43' font-family='monospace' font-size='34' fill='white'%3E%3E_%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <!--
+      THESIS: Founder judgment leads and technical depth proves it; the portfolio refuses the interchangeable senior-engineer showcase.
+      OWN-WORLD: Strict black and white, dense ASCII volumes, one-pixel rules, CRT scanlines, VHS tracking, stark inversions, compressed grotesk headlines, and data-only monospace.
+      STORY: Meet an engineer with a founder story, see how he makes zero-to-one and runway decisions, inspect the kitchen-cluster proof, then descend into products, systems, skills, outcomes, and resume.
+      FIRST VIEWPORT: A hard-edged identity statement establishes Sahil before a near-full-screen ASCII MoltMesh volume; layer controls alter the 3D object and LinkedIn remains visible at the structural edge.
+      FORM: User-pinned animated ASCII world replacing Packet Interchange; code-led.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+    -->
+    <a class="skip-link" href="#main">Skip to the system</a>
+
+    <aside class="identity-rail" aria-label="Portfolio identity and navigation">
+      <a class="monogram" href="#top" aria-label="Sahil Pohare, back to top">SP</a>
+      <nav aria-label="Primary navigation">
+        <a href="#about" data-route-link="about"><span>About</span></a>
+        <a href="#kitchen" data-route-link="kitchen"><span>Kitchen</span></a>
+        <a href="#systems" data-route-link="systems"><span>Systems</span></a>
+        <a href="#ledger" data-route-link="ledger"><span>Ledger</span></a>
+        <a href="#history" data-route-link="history"><span>Resume</span></a>
+      </nav>
+      <a class="rail-contact" href="https://www.linkedin.com/in/sahil-pohare-5b3aa9149/" target="_blank" rel="noreferrer">
+        <span>Signal me</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" /></svg>
+      </a>
+    </aside>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-topline">
+          <p>Dublin, Ireland <span aria-hidden="true">/</span> building globally</p>
+          <p class="live-status"><span aria-hidden="true"></span> Shipping voice agents at Lightwork AI</p>
+        </div>
+
+        <div class="hero-copy">
+          <h1 id="hero-title">Engineer with <strong>a founder story.</strong></h1>
+          <p>I'm Sahil Pohare. I turn founder intent into products customers use, making pragmatic technical decisions that protect runway.</p>
+        </div>
+
+        <div class="ascii-volume" id="moltmesh" aria-labelledby="mesh-title">
+          <canvas id="ascii-mesh" aria-hidden="true"></canvas>
+          <div class="volume-frame" aria-hidden="true"><span>+</span><span>+</span><span>+</span><span>+</span></div>
+          <div class="volume-status">
+            <span id="mesh-title">MOLTMESH://LIVE_VOLUME</span>
+            <span id="mesh-readout">ALL_LAYERS / ROTATE_TO_INSPECT</span>
+          </div>
+          <div class="volume-copy">
+            <p id="mesh-description">Most AI agents cannot safely find and delegate work to agents outside their own platform. I built MoltMesh so they can, without a central server.</p>
+            <p class="volume-instruction">Drag or move to rotate. Select a layer to isolate its role.</p>
+          </div>
+          <div class="mesh-controls" role="group" aria-label="Explore MoltMesh protocol layers">
+            <button type="button" class="is-active" data-mesh-focus="all" aria-pressed="true"><span>00</span> All layers</button>
+            <button type="button" data-mesh-focus="identity" aria-pressed="false"><span>01</span> Signed identity</button>
+            <button type="button" data-mesh-focus="delegation" aria-pressed="false"><span>02</span> Delegation</button>
+            <button type="button" data-mesh-focus="isolation" aria-pressed="false"><span>03</span> MicroVM isolation</button>
+            <button type="button" data-mesh-focus="consensus" aria-pressed="false"><span>04</span> Replicated log</button>
+          </div>
+          <div class="stage-foot">
+            <p>Any agent. Any framework. No central server. No API keys.</p>
+            <div class="stage-links">
+              <a href="https://openmolt.network" target="_blank" rel="noreferrer">Open the network <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" /></svg></a>
+              <a href="https://github.com/sahilpohare/MoltMesh" target="_blank" rel="noreferrer">GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" /></svg></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-junctions" aria-label="Portfolio entry points">
+          <button type="button" data-scroll-to="systems"><span>Explore the systems</span><b>05 projects</b></button>
+          <button type="button" data-scroll-to="ledger"><span>See business outcomes</span><b>$200K+ / year</b></button>
+          <a href="https://www.linkedin.com/in/sahil-pohare-5b3aa9149/" target="_blank" rel="noreferrer"><span>Start a conversation</span><b>LinkedIn ↗</b></a>
+        </div>
+      </section>
+
+      <section class="about" id="about" aria-labelledby="about-title">
+        <pre class="ascii-banner" aria-hidden="true">WHOAMI  sahil.pohare  -- founder -- principal-engineer -- systems-builder</pre>
+        <div class="about-lead">
+          <h2 id="about-title">I think like a founder because I have been one.</h2>
+          <p>The engineering is only half the job. I have done customer discovery, fundraising, product strategy, early sales, hiring, architecture, and the unglamorous work of getting a company from an idea to something people use.</p>
+        </div>
+        <div class="about-grid">
+          <article>
+            <span>WHAT I DO</span>
+            <h3>Find what is worth building</h3>
+            <p>I conducted more than 150 user interviews for Skyfern, pitched the product, worked on fundraising, and turned repeated customer pain into a concrete product direction.</p>
+          </article>
+          <article>
+            <span>FOUNDING EXECUTION</span>
+            <h3>Take zero to one personally</h3>
+            <p>As employee #1 at AiSentr, I owned platform architecture and execution from inception while the company grew from zero to £500K ARR and a reported $10M valuation.</p>
+          </article>
+          <article>
+            <span>RUNWAY JUDGMENT</span>
+            <h3>Build on peanuts, not a cathedral</h3>
+            <p>“Building on peanuts” is one of my operating philosophies: choose the smallest architecture that earns the next stage, build or buy deliberately, and pay for scale only when customers prove it is needed.</p>
+          </article>
+        </div>
+        <div class="about-proof">
+          <p><b>Founder / engineer</b> Built Skyfern AI and Pingerchips from customer problem through product, infrastructure, and early commercial use; run Maplify Tech, my rescue-engineering studio.</p>
+          <p><b>First engineer</b> Employee #1 and Principal Engineer at AiSentr, taking founder intent into a platform that supported £500K ARR.</p>
+          <p><b>YC experience</b> Shipped growth and search systems at Orange Health Labs while learning inside a venture-backed operating environment.</p>
+        </div>
+      </section>
+
+      <section class="kitchen-cluster" id="kitchen" aria-labelledby="kitchen-title">
+        <pre class="ascii-banner" aria-hidden="true">GCP_CREDITS=0  AWS_CREDITS=0  →  HOME_K8S + AZURE_MASTER + PAYG_FAILOVER</pre>
+        <div class="kitchen-lead">
+          <h2 id="kitchen-title">I ran production infrastructure from my kitchen.</h2>
+          <div>
+            <p>I ran out of credits on both GCP and AWS, so I brought the workload home. A physical Kubernetes node in my kitchen began serving real production traffic for Skyfern AI and Pingerchips.</p>
+            <p>Cloudflare tunnels expose the kitchen node without opening the home network. A free Azure master controls it; if home goes offline, PAYG cloud pods spin up only for the downtime. Mission-critical transactions stay isolated on Vercel and serverless.</p>
+          </div>
+        </div>
+        <div class="kitchen-model-shell">
+          <canvas id="kitchen-3d-canvas" aria-hidden="true"></canvas>
+          <div class="kitchen-model-status">
+            <span>KITCHEN_CLUSTER / INTERACTIVE_MODEL</span>
+            <span id="kitchen-readout">HOME_K8S / PHYSICAL KITCHEN NODE</span>
+          </div>
+          <div class="kitchen-model-copy">
+            <p id="kitchen-description">The home node carries normal production compute. Drag the hybrid model to orbit, or isolate one cost-control path below.</p>
+          </div>
+          <div class="kitchen-controls" role="group" aria-label="Explore kitchen cluster infrastructure">
+            <button type="button" class="is-active" data-kitchen-view="local" aria-pressed="true"><span>01</span> Kitchen node</button>
+            <button type="button" data-kitchen-view="tunnel" aria-pressed="false"><span>02</span> Cloudflare tunnel</button>
+            <button type="button" data-kitchen-view="master" aria-pressed="false"><span>03</span> Free Azure master</button>
+            <button type="button" data-kitchen-view="failover" aria-pressed="false"><span>04</span> PAYG downtime pods</button>
+            <button type="button" data-kitchen-view="critical" aria-pressed="false"><span>05</span> Serverless critical path</button>
+          </div>
+        </div>
+        <div class="kitchen-outcomes">
+          <div><span>NORMAL OPERATION</span><strong>HOME</strong><p>production compute runs on the physical kitchen node</p></div>
+          <div><span>DOWNTIME COST</span><strong>QUIDS</strong><p>PAYG pods run only while the home node is unavailable</p></div>
+          <div><span>CRITICAL PATH</span><strong>EDGE</strong><p>transactions stay on Vercel and serverless infrastructure</p></div>
+        </div>
+      </section>
+
+      <section class="system-explorer" id="systems" aria-labelledby="systems-title">
+        <pre class="ascii-banner" aria-hidden="true">+--[ SYSTEM_INDEX ]-------------------------{ 05 LIVE ROUTES }--+</pre>
+        <header class="section-head">
+          <h2 id="systems-title">Systems I have built and led.</h2>
+          <p>Select a project to see the problem it solves, the architecture I chose, the constraint behind that decision, and the implementation you can inspect.</p>
+        </header>
+
+        <div class="explorer-shell">
+          <div class="route-tabs" role="tablist" aria-label="Flagship systems">
+            <button id="tab-moltmesh" role="tab" aria-selected="true" aria-controls="panel-system" data-system="moltmesh">
+              <span class="route-swatch swatch-yellow"></span><b>MoltMesh</b><small>Agent-to-agent protocol</small>
+            </button>
+            <button id="tab-thesis" role="tab" aria-selected="false" aria-controls="panel-system" data-system="thesis" tabindex="-1">
+              <span class="route-swatch swatch-blue"></span><b>BEAM Mesh</b><small>Capability routing</small>
+            </button>
+            <button id="tab-pinger" role="tab" aria-selected="false" aria-controls="panel-system" data-system="pinger" tabindex="-1">
+              <span class="route-swatch swatch-orange"></span><b>Pingerchips</b><small>Durable realtime</small>
+            </button>
+            <button id="tab-skyfern" role="tab" aria-selected="false" aria-controls="panel-system" data-system="skyfern" tabindex="-1">
+              <span class="route-swatch swatch-pink"></span><b>Skyfern</b><small>Decision intelligence</small>
+            </button>
+            <button id="tab-maplify" role="tab" aria-selected="false" aria-controls="panel-system" data-system="maplify" tabindex="-1">
+              <span class="route-swatch"></span><b>Maplify Tech</b><small>Founder / rescue engineering</small>
+            </button>
+          </div>
+
+          <article class="system-panel" id="panel-system" role="tabpanel" aria-labelledby="tab-moltmesh" aria-live="polite">
+            <div class="system-copy">
+              <p class="system-state" id="system-state">Route open / public repository</p>
+              <h3 id="system-title">A mesh where agents can trust the handoff.</h3>
+              <p id="system-summary">MoltMesh lets heterogeneous AI agents discover peers, delegate work, exchange context, and stream results without central infrastructure.</p>
+              <a id="system-link" class="text-link" href="https://github.com/sahilpohare/MoltMesh" target="_blank" rel="noreferrer">Open source code <span>↗</span></a>
+            </div>
+            <dl class="system-facts" id="system-facts">
+              <div><dt>Transport</dt><dd>QUIC + Noise</dd></div>
+              <div><dt>Discovery</dt><dd>Kademlia DHT</dd></div>
+              <div><dt>Authority</dt><dd>did:key + Ed25519</dd></div>
+              <div><dt>Isolation</dt><dd>Firecracker microVM</dd></div>
+            </dl>
+            <div class="decision-line">
+              <span>Constraint</span>
+              <p id="system-constraint">Agents written in any language needed one secure, auditable coordination layer without inheriting libp2p complexity.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="pingerchips-case" id="pingerchips" aria-labelledby="pinger-title">
+        <pre class="ascii-banner" aria-hidden="true">┌─ PINGERCHIPS://RUN_8F2C ─────── network: wifi → cellular ──┐</pre>
+        <div class="pinger-lead">
+          <h2 id="pinger-title">The transport layer for AI.</h2>
+          <div class="project-context">
+            <p><b>What problem am I solving?</b> AI work takes time. If a user changes network, reloads the page, or a worker crashes, a normal token stream dies and the agent often starts again from zero.</p>
+            <p><b>What did I build?</b> Pingerchips replaces the duct-taped mix of SSE, message history, job queues, and socket notifications with one durable realtime layer.</p>
+          </div>
+        </div>
+        <div class="stream-terminal" aria-label="A Pingerchips stream survives a network disconnect and resumes without losing tokens">
+          <div class="terminal-head"><span>agent.pushToken()</span><span>RUN 8F2C / ACTIVE</span></div>
+          <pre aria-hidden="true"><code><span class="stream-muted">0001 0002 0003 0004 0005 0006 0007 0008</span>
+0009 0010 0011 0012 0013 0014 0015 0016
+0017 0018 0019 0020 0021 0022 0023 0024
+
+─────────────── <b>NETWORK DROPS @ 00:41</b> ───────────────
+                     ×
+                wifi → cellular
+                     ↓
+─────────────── <b>STREAM RESUMES</b> ─────────────────────
+
+0025 0026 0027 0028 0029 0030 0031 0032
+0033 0034 0035 0036 0037 0038 0039 0040
+
+<b>0 TOKENS LOST  /  MID-TOKEN RESUME  /  MESSAGE COMMITTED</b></code></pre>
+          <div class="stream-pulse" aria-hidden="true"></div>
+        </div>
+        <div class="pinger-primitives">
+          <div><span>01 / FOR THE USER</span><h3>The answer keeps streaming</h3><p>The user can switch from Wi-Fi to cellular or reload the page. The response resumes instead of disappearing.</p></div>
+          <div><span>02 / FOR THE AGENT</span><h3>The work survives a crash</h3><p>Agent state lives in a durable object. A replacement worker can recover context and continue the interrupted run.</p></div>
+          <div><span>03 / FOR THE TEAM</span><h3>One system to operate</h3><p>Threads, history, pub/sub, worker claiming, and delivery guarantees share one SDK in JavaScript and Python.</p></div>
+        </div>
+        <div class="pinger-foot">
+          <p>Managed cloud → your VPC → fully air-gapped. Same primitives. No rewrite.</p>
+          <a href="https://pingerchips.com" target="_blank" rel="noreferrer">Open Pingerchips <span>↗</span></a>
+          <a href="https://docs.pingerchips.com/" target="_blank" rel="noreferrer">Read the docs <span>↗</span></a>
+        </div>
+      </section>
+
+      <section class="maplify-case" id="maplify" aria-labelledby="maplify-title">
+        <pre class="ascii-banner" aria-hidden="true">git diff v0.1..production  -- security -- data -- architecture</pre>
+        <div class="maplify-lead">
+          <h2 id="maplify-title">You vibe.<br />We harden.</h2>
+          <div>
+            <p><b>Who is this for?</b> Founders who used tools like Lovable, Bolt, Cursor, Replit, or Claude Code to reach v0.1 fast, then discovered the product was not ready for real customers.</p>
+            <p><b>What do I do?</b> Maplify Tech is my rescue-engineering studio. I keep the working product live while repairing its security, data model, architecture, tests, deployment, and operational ownership underneath.</p>
+            <a href="https://maplifytech.com" target="_blank" rel="noreferrer">Visit Maplify Tech <span>↗</span></a>
+          </div>
+        </div>
+        <div class="rescue-diff">
+          <div class="diff-before">
+            <span>V0.1 / OBSERVED</span>
+            <pre aria-hidden="true"><code>- auth: implicit
+- secrets: client_env
+-- database: public
+--- tests: none
+---- deploy: manual
+----- ownership: unclear</code></pre>
+          </div>
+          <div class="diff-arrow" aria-hidden="true">
+            <pre>       ┌───────────┐
+──────▶│  RESCUE   │──────▶
+       └───────────┘</pre>
+          </div>
+          <div class="diff-after">
+            <span>PRODUCTION / HANDOFF</span>
+            <pre aria-hidden="true"><code>+ auth: enforced
++ secrets: managed
+++ database: RLS
++++ tests: critical paths
+++++ deploy: CI/CD
++++++ ownership: documented</code></pre>
+          </div>
+        </div>
+        <ol class="rescue-stages">
+          <li><span>01</span><div><h3>Assess</h3><p>Rank code, infrastructure, security, and data risks by severity and business impact.</p></div></li>
+          <li><span>02</span><div><h3>Stabilize</h3><p>Close critical exposures first so the product can keep operating safely.</p></div></li>
+          <li><span>03</span><div><h3>Harden + refactor</h3><p>Repair architecture, data, tests, delivery, performance, and observability.</p></div></li>
+          <li><span>04</span><div><h3>Hand off</h3><p>Leave documentation, runbooks, and a system the team can own.</p></div></li>
+        </ol>
+      </section>
+
+      <section class="skills-section" aria-labelledby="focus-title">
+        <pre class="ascii-banner" aria-hidden="true">SKILLS_ARE_EXECUTION_CAPACITY  strategy_first=true  depth=4D</pre>
+        <div class="technical-focus">
+          <div class="focus-heading">
+            <span>SKILLS_4D / ELIXIR_FOCUSED</span>
+            <h3 id="focus-title">Four dimensions of how I execute.</h3>
+            <p>Strategy comes first. This is the technical range I use to turn the decision into a product: a real four-dimensional tesseract projected into this screen.</p>
+          </div>
+          <div class="skills-4d-stage">
+            <canvas id="skills-4d-canvas" aria-hidden="true"></canvas>
+            <div class="skills-readout"><span>PROJECTION: 4D → 3D → 2D</span><span id="skills-axis-readout">AXIS_W / ELIXIR + BEAM + OTP</span></div>
+          </div>
+          <div class="skill-axes" role="group" aria-label="Technical skill dimensions">
+            <button type="button" class="is-active" data-skill-axis="beam" aria-pressed="true"><span>W / PRIMARY</span><b>Elixir / BEAM + OTP</b><p>Fault-tolerant processes, supervision, distributed registries, CRDTs, realtime channels, and systems that recover.</p><code>Elixir · Erlang · Horde · Nerves · Phoenix · Rustler</code></button>
+            <button type="button" data-skill-axis="go" aria-pressed="false"><span>X / NETWORK</span><b>Golang</b><p>Network daemons, peer-to-peer protocols, high-throughput services, and infrastructure with a small operational surface.</p><code>libp2p · gRPC · QUIC · Kademlia · etcd/raft</code></button>
+            <button type="button" data-skill-axis="next" aria-pressed="false"><span>Y / PRODUCT</span><b>Next.js + React</b><p>The customer-facing product around the infrastructure: workflow builders, realtime chat, research tools, and operating interfaces.</p><code>Next.js · React · TanStack · Canvas · Tailwind</code></button>
+            <button type="button" data-skill-axis="infra" aria-pressed="false"><span>Z / OPERATIONS</span><b>Infrastructure</b><p>Kubernetes, cloud and bare metal, observability, queues, data systems, and the economics that keep production sustainable.</p><code>Kubernetes · Azure · AWS · Kafka · Redis · Postgres</code></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="ledger" id="ledger" aria-labelledby="ledger-title">
+        <pre class="ascii-banner" aria-hidden="true">$ ./measure-impact --source=production --format=ledger</pre>
+        <div class="ledger-intro">
+          <h2 id="ledger-title">The work moved the company.</h2>
+          <p>Zero-to-one judgment is visible in what happened next: users interviewed, revenue supported, customers won, growth moved, and runway preserved.</p>
+        </div>
+
+        <div class="ledger-table" role="table" aria-label="Selected engineering outcomes">
+          <div class="ledger-row ledger-header" role="row">
+            <span role="columnheader">Company / role</span><span role="columnheader">Founder-minded work</span><span role="columnheader">Observed outcome</span>
+          </div>
+          <div class="ledger-row" role="row">
+            <span role="cell"><b>AiSentr</b><small>Employee #1 / principal</small></span>
+            <span role="cell">Translated founder intent into the first platform, led architecture and execution, and scaled the engineering team.</span>
+            <span role="cell"><strong>£500K</strong><small>ARR supported from zero</small></span>
+          </div>
+          <div class="ledger-row" role="row">
+            <span role="cell"><b>Skyfern AI</b><small>Founder / engineer</small></span>
+            <span role="cell">Ran discovery, pitched the company, worked on fundraising, and converted research-team pain into product direction.</span>
+            <span role="cell"><strong>150+</strong><small>user interviews</small></span>
+          </div>
+          <div class="ledger-row" role="row">
+            <span role="cell"><b>Pingerchips</b><small>Founder / engineer</small></span>
+            <span role="cell">Identified a repeated AI transport problem, built the product and infrastructure, and took it into early commercial use.</span>
+            <span role="cell"><strong>5</strong><small>B2B customers</small></span>
+          </div>
+          <div class="ledger-row" role="row">
+            <span role="cell"><b>Orange Health</b><small>Software engineer</small></span>
+            <span role="cell">Built user-growth tools and bucketed search with ELK and Elasticsearch.</span>
+            <span role="cell"><strong>+23%</strong><small>user acquisition</small></span>
+          </div>
+          <div class="ledger-row" role="row">
+            <span role="cell"><b>Across roles</b><small>Runway architecture</small></span>
+            <span role="cell">Made pragmatic build-versus-buy, infrastructure, indexing, and data decisions around real stage constraints.</span>
+            <span role="cell"><strong>$200K+</strong><small>annual cloud savings</small></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="field-notes" aria-labelledby="notes-title">
+        <pre class="ascii-banner" aria-hidden="true">{ TALK }---{ BUILD LOG }---{ OPEN SOURCE }---&gt;</pre>
+        <header class="section-head light-head">
+          <h2 id="notes-title">Field notes from the edges.</h2>
+          <p>Talks, experiments, and side routes are where the next production system usually begins.</p>
+        </header>
+        <div class="notes-track">
+          <a class="note-ticket" href="https://www.goatmire.com/talk/we-got-communist-nerves-before-gta-6-lol" target="_blank" rel="noreferrer">
+            <span>Conference talk / Sweden</span>
+            <h3>We got Communist Nerves before GTA 6 lol</h3>
+            <p>A BitTorrent-like compute mesh for embedded BEAM nodes, routing work by capability instead of location.</p>
+            <b>Watch / read ↗</b>
+          </a>
+          <a class="note-ticket" href="https://dev.to/sahil_pohare/building-a-decentralized-ai-chatbot-with-mimirllm-a-step-by-step-tutorial-1ppl" target="_blank" rel="noreferrer">
+            <span>Build log / MimirLLM</span>
+            <h3>Building a decentralized AI chatbot</h3>
+            <p>A practical route through libp2p, peer discovery, local models, and an LLM network with no central API.</p>
+            <b>Read the tutorial ↗</b>
+          </a>
+          <a class="note-ticket" href="https://hex.pm/packages/ex_sift" target="_blank" rel="noreferrer">
+            <span>Open source / Elixir</span>
+            <h3>ex_sift</h3>
+            <p>A published Hex package, alongside a merged Horde fix for the distributed CRDT process registry.</p>
+            <b>Inspect package ↗</b>
+          </a>
+        </div>
+      </section>
+
+      <section class="history" id="history" aria-labelledby="history-title">
+        <pre class="ascii-banner" aria-hidden="true">HEAD^  *---*---*---*---*  /history/sahil  [6 commits]</pre>
+        <header class="history-head">
+          <h2 id="history-title">Resume / experience.</h2>
+          <p>Five-plus years of professional engineering across AI, infrastructure, backend, realtime systems, and customer-facing product, backed by fifteen years of programming.</p>
+        </header>
+        <ol class="history-line">
+          <li><time datetime="2026">Now</time><div><h3>Lightwork AI</h3><p>Senior Product Engineer</p><span>Voice agent orchestration, realtime telephony, evaluation, React</span></div></li>
+          <li><time>Founder</time><div><h3>Skyfern + Pingerchips</h3><p>Founder / engineer</p><span>Customer discovery, product strategy, fundraising, early sales, architecture, and zero-to-one delivery</span></div></li>
+          <li><time datetime="2025">2025</time><div><h3>Maynooth + FDE</h3><p>Master's in CS / Forward-Deployed Engineer</p><span>Distributed BEAM thesis, founder-embedded product work</span></div></li>
+          <li><time datetime="2024">2024</time><div><h3>AiSentr</h3><p>Employee #1 / Principal Engineer</p><span>£0 to £500K ARR, platform architecture, engineering leadership</span></div></li>
+          <li><time datetime="2023">2023</time><div><h3>Orange Health Labs (YC20)</h3><p>Software Development Engineer</p><span>Growth systems, search, Kubernetes, Golang inside a YC-backed operating environment</span></div></li>
+          <li><time datetime="2022">2022</time><div><h3>Bot.space</h3><p>Backend + DevOps Lead</p><span>Realtime messaging, database economics, delivery automation</span></div></li>
+          <li><time datetime="2021">2021</time><div><h3>Rigbetel Labs</h3><p>Freelance Software Developer</p><span>Realtime, mobile, backend, and infrastructure systems</span></div></li>
+        </ol>
+      </section>
+
+      <footer class="contact" aria-labelledby="contact-title">
+        <p class="contact-route">Dublin <span></span> anywhere worth building</p>
+        <h2 id="contact-title">Have a hard system problem?</h2>
+        <a href="https://www.linkedin.com/in/sahil-pohare-5b3aa9149/" target="_blank" rel="noreferrer">
+          <span>Send a signal on LinkedIn</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" /></svg>
+        </a>
+        <div class="footer-meta"><span>Sahil Pankaj Pohare</span><span>Built on peanuts, not shortcuts.</span><span>2026</span></div>
+      </footer>
+    </main>
+  </body>
+</html>
