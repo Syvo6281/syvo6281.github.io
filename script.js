@@ -759,7 +759,7 @@ drawKitchen();
   const SPAWN_X = -4.5;
 
   const views = {
-    problem:  { readout: "Gate 01 / Problem", questions: ["What problem are we solving?", "Who are we solving it for, and how big is the problem?"], gloss: "If I can't name the problem and the person who has it, nothing after this matters." },
+    problem:  { readout: "Gate 01 / Problem", questions: ["<em>What</em> <b>problem</b> <em>are we</em> <b>solving</b><em>?</em>", "<b>Who</b> <em>are we solving it for, and how</em> <b>big</b> <em>is the</em> <b>problem</b><em>?</em>"], gloss: "If I can't name the problem and the person who has it, nothing after this matters." },
     solution: { readout: "Gate 02 / Solution", questions: ["What's the current process, and how does our solution improve it?", "What does the solution actually look like?"], gloss: "Compared to what they do today. If it isn't clearly better, it's a feature, not a product." },
     sale:     { readout: "Gate 03 / Sale", questions: ["What's the minimum work needed to make the first sale?", "Do I know people who can and will buy this MVP within a week?"], gloss: "Not a launch. A sale, within a week, to someone I already know. Answered with data, not assumptions." },
     split:    { readout: "Gate 04 / Build or buy", questions: ["What business are we in?", "Build only what's ours. Buy the rest."], gloss: "Selling UX agents doesn't put us in the analytics, data-pipeline, or sandbox-isolation business. Someone else does that better, and their product is legally required to work." }

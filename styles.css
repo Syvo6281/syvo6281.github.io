@@ -440,6 +440,8 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 .gate-text { display: flex; flex-direction: column; padding: clamp(1.5rem, 3vw, 3rem); border-right: 1px solid var(--black); }
 .gate-big { margin: 0 0 auto; padding: 0; list-style: none; counter-reset: gate; }
 .gate-big li { position: relative; max-width: 16ch; margin-bottom: clamp(1rem, 2vw, 1.6rem); padding-left: 2.6rem; font-family: var(--display); font-size: clamp(1.55rem, 2.7vw, 2.7rem); font-weight: 400; line-height: 1; letter-spacing: -.02em; text-transform: uppercase; text-wrap: balance; }
+.gate-big b { font-family: var(--display); font-weight: 400; }
+.gate-big em { font-family: var(--body); font-style: normal; font-weight: 300; color: var(--dim-light); }
 .gate-big li::before { counter-increment: gate; content: counter(gate, decimal-leading-zero); position: absolute; left: 0; top: .2em; font-family: var(--mono); font-size: .72rem; font-weight: 800; letter-spacing: .04em; }
 .gate-gloss { max-width: 44ch; margin: 1.5rem 0 0; padding-top: 1.2rem; border-top: 1px solid var(--black); color: var(--dim-light); }
 .gate-stage { position: relative; min-height: 26rem; background: var(--black); color: var(--white); overflow: hidden; cursor: none; -webkit-user-select: none; user-select: none; touch-action: none; }
