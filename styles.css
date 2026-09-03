@@ -449,7 +449,7 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 .gate-status { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; gap: 1rem; padding: .65rem .8rem; border-bottom: 1px solid var(--white); background: var(--black); font-family: var(--mono); font-size: .6rem; font-weight: 700; letter-spacing: .04em; }
 .pragmatism { padding: clamp(3rem, 6vw, 5rem) var(--pad); background: var(--off); color: var(--black); border-bottom: 1px solid var(--black); }
 .pragmatism .system-state { margin-bottom: clamp(1.2rem, 2.5vw, 2rem); }
-.pragmatism-quote { max-width: 30ch; margin: 0; font-family: var(--display); font-size: clamp(1.6rem, 3.1vw, 3.1rem); font-weight: 400; line-height: 1.02; letter-spacing: -.03em; text-transform: uppercase; text-wrap: balance; }
+.pragmatism-quote { max-width: 34ch; margin: 0; font-family: var(--display); font-size: clamp(1.45rem, 2.6vw, 2.6rem); font-weight: 400; line-height: 1.02; letter-spacing: -.03em; text-transform: uppercase; text-wrap: balance; }
 .pragmatism-quote::before { content: "\201C"; }
 .pragmatism-quote::after { content: "\201D"; }
 .pragmatism-quote strong { font-weight: inherit; color: transparent; -webkit-text-stroke: 1.5px var(--black); }
