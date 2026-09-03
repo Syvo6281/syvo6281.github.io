@@ -354,6 +354,20 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
   white-space: pre;
 }
 
+/* Relationship kicker: states what a section IS (project / product / studio)
+   before its pitch. Sits between the ascii-banner and the h2. */
+.section-tag {
+  margin: calc(-1 * clamp(2rem, 4vw, 4rem)) 0 clamp(1rem, 2vw, 1.6rem);
+  font-family: var(--mono);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--dim-light);
+}
+.section-tag::before { content: "// "; }
+.tagline { color: var(--black); font-style: italic; }
+
 .about { padding: clamp(3.5rem, 7vw, 6rem) var(--pad); background: var(--off); color: var(--black); border-bottom: 1px solid var(--black); }
 .about-lead { display: grid; grid-template-columns: 1.35fr .65fr; gap: clamp(2rem, 5vw, 5rem); align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
 .about-lead h2 { max-width: 14ch; margin: 0; font-family: var(--display); font-size: clamp(2.75rem, 6vw, 5.75rem); font-weight: 400; line-height: .92; letter-spacing: -.04em; text-transform: uppercase; }
@@ -425,7 +439,7 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 .section-head p, .ledger-intro p, .pinger-lead p, .history-head > p { max-width: 36rem; margin-bottom: .2rem; color: var(--dim-light); font-size: 1.05rem; }
 
 .explorer-shell { border: 1px solid var(--black); }
-.route-tabs { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--black); }
+.route-tabs { display: grid; grid-template-columns: repeat(6, 1fr); border-bottom: 1px solid var(--black); }
 .route-tabs button { position: relative; display: grid; grid-template-columns: 1.4rem 1fr; column-gap: .65rem; padding: 1rem; border: 0; border-right: 1px solid var(--black); background: var(--white); color: var(--black); font-family: var(--mono); text-align: left; cursor: pointer; }
 .route-tabs button:last-child { border-right: 0; }
 .route-tabs button[aria-selected="true"] { background: var(--black); color: var(--white); }
@@ -495,6 +509,14 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 .rescue-stages span { font-family: var(--mono); font-size: .65rem; }
 .rescue-stages h3 { margin-bottom: .7rem; font-family: var(--display); font-size: clamp(1.3rem, 2.1vw, 2rem); font-weight: 400; line-height: 1; text-transform: uppercase; }
 .rescue-stages p { max-width: 43ch; margin: 0; color: var(--dim-light); }
+
+.mimir-case { padding: clamp(3.5rem, 7vw, 6rem) var(--pad); background: var(--off); color: var(--black); border-top: 1px solid var(--black); }
+.mimir-case h2 { margin: 0; font-family: var(--display); font-size: clamp(3rem, 7vw, 6rem); font-weight: 400; line-height: .9; letter-spacing: -.04em; text-transform: uppercase; }
+.mimir-flow { border: 1px solid var(--black); background: var(--black); color: var(--white); overflow-x: auto; }
+.mimir-flow pre { margin: 0; padding: 1.5rem; min-width: max-content; font-family: var(--mono); font-size: clamp(.5rem, .95vw, .75rem); line-height: 1.5; }
+.mimir-flow b { color: var(--white); }
+.mimir-foot { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; margin-top: clamp(2rem, 4vw, 3rem); padding-top: 1.2rem; border-top: 1px solid var(--black); font-family: var(--mono); font-size: .68rem; }
+.mimir-foot a { min-height: 2.75rem; display: inline-flex; align-items: center; font-weight: 800; }
 
 .ledger { padding: clamp(3.5rem, 7vw, 6rem) var(--pad); background: var(--black); color: var(--white); }
 .ledger-intro { display: grid; grid-template-columns: 1.35fr .65fr; gap: clamp(2rem, 5vw, 5rem); align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
@@ -614,7 +636,7 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 
 @media (max-width: 640px) {
   :root { --pad: 1rem; }
-  .about, .kitchen-cluster, .system-explorer, .pingerchips-case, .maplify-case, .skills-section, .ledger, .history, .contact { padding-top: 3rem; padding-bottom: 3rem; }
+  .about, .kitchen-cluster, .system-explorer, .pingerchips-case, .maplify-case, .mimir-case, .skills-section, .ledger, .history, .contact { padding-top: 3rem; padding-bottom: 3rem; }
   .field-notes { padding-top: 3rem; padding-bottom: 3rem; }
   .identity-rail nav a { min-width: 4.4rem; padding: 0 .6rem; font-size: .54rem; }
   .hero { padding-top: 1rem; }
