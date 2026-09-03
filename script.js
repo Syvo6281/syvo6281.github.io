@@ -762,7 +762,8 @@ drawKitchen();
     problem:  { readout: "Gate 01 / Problem",
       questions: [
         "<b>What problem</b> <em>are we solving?</em>",
-        "<em>Who are we solving it for, and</em> <b>how big</b> <em>is the problem?</em>"
+        "<b>Who</b> <em>are we solving it for?</em>",
+        "<b>How big</b> <em>is the problem?</em>"
       ],
       gloss: "If I can't name the problem and the person who has it, nothing after this matters." },
     solution: { readout: "Gate 02 / Solution",
