@@ -729,6 +729,262 @@ window.addEventListener("resize", () => drawKitchen(performance.now()));
 drawKitchen();
 
 /* ---------------------------------------------------------------------------
+   Decision pipeline (method section)
+   A 3D ASCII corridor: ideas enter at the left, travel through three gates
+   (problem, solution, sale), and most are knocked out and fall away. The few
+   that survive reach a fork, where they split into what we build ourselves
+   (ours) and what we buy (not ours). Same canvas contract as the kitchen model:
+   drag to orbit, pressed-state gate controls, pause offscreen, static frame
+   under reduced motion. The IN / SHIPPED counter makes the attrition visible.
+--------------------------------------------------------------------------- */
+(() => {
+  const gateCanvas = document.querySelector("#gate-canvas");
+  const gateStage = document.querySelector(".gate-stage");
+  if (!gateCanvas || !gateStage) return;
+  const gctx = gateCanvas.getContext("2d", { alpha: false });
+  const gateButtons = [...document.querySelectorAll("[data-gate]")];
+  const readoutEl = document.querySelector("#gate-readout");
+  const questionsEl = document.querySelector("#gate-questions");
+  const counterEl = document.querySelector("#gate-counter");
+  const mono = () => getComputedStyle(document.documentElement).getPropertyValue("--mono");
+
+  const GATES = [
+    { key: "problem",  x: -2.4, label: "01 PROBLEM",  pass: .62 },
+    { key: "solution", x: 0,    label: "02 SOLUTION", pass: .6 },
+    { key: "sale",     x: 2.4,  label: "03 SALE",     pass: .5 }
+  ];
+  const FORK_X = 3.5;
+  const ARM_BUILD = { from: { x: FORK_X, y: 0, z: 0 }, to: { x: 4.7, y: 1.05, z: -.85 }, label: "BUILD / OURS" };
+  const ARM_BUY   = { from: { x: FORK_X, y: 0, z: 0 }, to: { x: 4.7, y: -.55, z: .95 }, label: "BUY / NOT OURS" };
+  const SPAWN_X = -4.5;
+
+  const views = {
+    problem:  { readout: "Gate 01 / Problem", questions: ["What problem are we solving?", "Who are we solving it for, and how big is the problem?"], gloss: "If I can't name the problem and the person who has it, nothing after this matters." },
+    solution: { readout: "Gate 02 / Solution", questions: ["What's the current process, and how does our solution improve it?", "What does the solution actually look like?"], gloss: "Compared to what they do today. If it isn't clearly better, it's a feature, not a product." },
+    sale:     { readout: "Gate 03 / Sale", questions: ["What's the minimum work needed to make the first sale?", "Do I know people who can and will buy this MVP within a week?"], gloss: "Not a launch. A sale, within a week, to someone I already know. Answered with data, not assumptions." },
+    split:    { readout: "Gate 04 / Build or buy", questions: ["What business are we in?", "Build only what's ours. Buy the rest."], gloss: "Selling UX agents doesn't put us in the analytics, data-pipeline, or sandbox-isolation business. Someone else does that better, and their product is legally required to work." }
+  };
+
+  let view = "problem";
+  let rotX = -.2, rotY = -.38, targetX = rotX, targetY = rotY;
+  let dragging = false, pointer = null, visible = true, frame = 0;
+  let lastTime = 0, spawnAt = 0, nextId = 1;
+  let inCount = 0, shipped = 0;
+  const ideas = [];
+
+  // Deterministic per-idea fate so the same idea always dies at the same gate.
+  function fateFor(seed) {
+    let s = (seed * 2654435761) >>> 0;
+    const rnd = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+    for (let g = 0; g < GATES.length; g += 1) if (rnd() > GATES[g].pass) return g;
+    return -1;
+  }
+  function spawn(now) {
+    const id = nextId++;
+    ideas.push({ id, x: SPAWN_X, y: .15 * Math.sin(id), z: .35 * Math.cos(id * 1.7), state: "travel", fate: fateFor(id), vy: 0, vz: 0, born: now });
+    inCount += 1;
+  }
+
+  function rotate(p) {
+    const cy = Math.cos(rotY), sy = Math.sin(rotY);
+    const x1 = p.x * cy - p.z * sy, z1 = p.x * sy + p.z * cy;
+    const cx = Math.cos(rotX), sx = Math.sin(rotX);
+    return { x: x1, y: p.y * cx - z1 * sx, z: p.y * sx + z1 * cx };
+  }
+  function project(p, w, h) {
+    const depth = 9.2 + p.z;
+    const scale = Math.min(w / 9.8, h / 5.6) * 9.2 / depth;
+    return { x: w / 2 + p.x * scale, y: h / 2 - p.y * scale, z: p.z };
+  }
+  function segment(a, b, w, h, active, ch = ".") {
+    const from = project(rotate(a), w, h), to = project(rotate(b), w, h);
+    const steps = active ? 22 : 14;
+    gctx.font = `${active ? 12 : 9}px ${mono()}`;
+    for (let i = 0; i <= steps; i += 1) {
+      const t = i / steps;
+      gctx.globalAlpha = active ? .95 : .22;
+      gctx.fillText(active && i % 3 === 0 ? "#" : ch, from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t);
+    }
+  }
+  function label(text, p, w, h, active, size = 10) {
+    const q = project(rotate(p), w, h);
+    gctx.globalAlpha = active ? 1 : .3;
+    gctx.font = `700 ${w < 600 ? size - 2 : size}px ${mono()}`;
+    gctx.fillText(text, q.x, q.y);
+  }
+  function glyph(text, p, w, h, alpha = 1, size = 14) {
+    const q = project(rotate(p), w, h);
+    gctx.globalAlpha = alpha;
+    gctx.font = `700 ${size}px ${mono()}`;
+    gctx.fillText(text, q.x, q.y);
+  }
+
+  function step(dt, now) {
+    if (now - spawnAt > 850 && ideas.filter((i) => i.state === "travel").length < 7) { spawn(now); spawnAt = now; }
+    for (let i = ideas.length - 1; i >= 0; i -= 1) {
+      const it = ideas[i];
+      if (it.state === "travel") {
+        const before = it.x;
+        it.x += 1.9 * dt;
+        const gateIdx = GATES.findIndex((g) => before < g.x && it.x >= g.x);
+        if (gateIdx !== -1 && it.fate === gateIdx) {
+          it.state = "killed";
+          it.vz = (it.id % 2 ? 1 : -1) * 1.5;
+          it.vy = .9;
+        } else if (it.x >= FORK_X) {
+          shipped += 1;
+          ideas.splice(i, 1);
+          ideas.push({ id: it.id, arm: ARM_BUILD, t: 0, state: "arm", ch: "◆" });
+          for (let k = 0; k < 3; k += 1) ideas.push({ id: it.id, arm: ARM_BUY, t: -k * .14, state: "arm", ch: "◇" });
+        }
+      } else if (it.state === "killed") {
+        it.vy -= 4.2 * dt;
+        it.y += it.vy * dt;
+        it.z += it.vz * dt;
+        if (it.y < -3.2) ideas.splice(i, 1);
+      } else if (it.state === "arm") {
+        it.t += dt / .9;
+        if (it.t > 1.15) ideas.splice(i, 1);
+      }
+    }
+    counterEl.textContent = `IN ${inCount} / SHIPPED ${shipped}`;
+  }
+
+  function draw() {
+    const rect = gateStage.getBoundingClientRect();
+    const ratio = Math.min(devicePixelRatio || 1, 2);
+    const w = Math.max(1, Math.floor(rect.width)), h = Math.max(1, Math.floor(rect.height));
+    if (gateCanvas.width !== w * ratio || gateCanvas.height !== h * ratio) {
+      gateCanvas.width = w * ratio; gateCanvas.height = h * ratio;
+      gateCanvas.style.width = `${w}px`; gateCanvas.style.height = `${h}px`;
+    }
+    gctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    gctx.fillStyle = "#050505"; gctx.fillRect(0, 0, w, h);
+    gctx.fillStyle = "#ffffff"; gctx.textAlign = "center"; gctx.textBaseline = "middle";
+
+    // Floor grid
+    for (let g = -5; g <= 5; g += 1) {
+      segment({ x: g, y: -1.7, z: -2.4 }, { x: g, y: -1.7, z: 2.4 }, w, h, false, ".");
+      segment({ x: -5, y: -1.7, z: g * .6 }, { x: 5, y: -1.7, z: g * .6 }, w, h, false, ".");
+    }
+    // Corridor spine
+    segment({ x: SPAWN_X, y: 0, z: 0 }, { x: FORK_X, y: 0, z: 0 }, w, h, false, ":");
+
+    // Gates: upright frames in the YZ plane
+    GATES.forEach((g) => {
+      const active = view === g.key;
+      const c = [{ y: -1.2, z: -1 }, { y: 1.2, z: -1 }, { y: 1.2, z: 1 }, { y: -1.2, z: 1 }].map((p) => ({ x: g.x, ...p }));
+      for (let i = 0; i < 4; i += 1) segment(c[i], c[(i + 1) % 4], w, h, active, active ? "=" : ".");
+      label(`[${g.label}]`, { x: g.x, y: 1.55, z: 0 }, w, h, active);
+    });
+
+    // Fork: build arm and buy arm
+    const forkActive = view === "split";
+    segment(ARM_BUILD.from, ARM_BUILD.to, w, h, forkActive, forkActive ? "=" : ":");
+    segment(ARM_BUY.from, ARM_BUY.to, w, h, forkActive, forkActive ? "=" : ":");
+    label(`[04 ${ARM_BUILD.label}]`, { x: ARM_BUILD.to.x + .1, y: ARM_BUILD.to.y + .3, z: ARM_BUILD.to.z }, w, h, forkActive, 9);
+    label(`[04 ${ARM_BUY.label}]`, { x: ARM_BUY.to.x + .1, y: ARM_BUY.to.y - .32, z: ARM_BUY.to.z }, w, h, forkActive, 9);
+    label("[ideas in]", { x: SPAWN_X, y: .5, z: 0 }, w, h, false, 9);
+
+    // Ideas
+    ideas.forEach((it) => {
+      if (it.state === "travel") glyph("◆", it, w, h, 1, 14);
+      else if (it.state === "killed") glyph("×", it, w, h, Math.max(0, Math.min(1, (it.y + 3.2) / 2.2)), 13);
+      else if (it.state === "arm" && it.t >= 0) {
+        const t = Math.min(1, it.t);
+        const p = { x: it.arm.from.x + (it.arm.to.x - it.arm.from.x) * t, y: it.arm.from.y + (it.arm.to.y - it.arm.from.y) * t, z: it.arm.from.z + (it.arm.to.z - it.arm.from.z) * t };
+        glyph(it.ch, p, w, h, 1 - Math.max(0, it.t - 1) * 6, 13);
+      }
+    });
+    gctx.globalAlpha = 1;
+  }
+
+  function animate(now) {
+    if (!visible || document.hidden || reducedMotion) return;
+    const dt = lastTime ? Math.min(.05, (now - lastTime) / 1000) : 0;
+    lastTime = now;
+    if (!dragging) targetY += .00035;
+    rotX += (targetX - rotX) * .06;
+    rotY += (targetY - rotY) * .06;
+    step(dt, now);
+    draw();
+    frame = requestAnimationFrame(animate);
+  }
+
+  // Reduced motion: a fixed snapshot with attrition already visible.
+  function staticScene() {
+    ideas.length = 0;
+    [-3.7, -1.5, .7, 1.9].forEach((x, i) => ideas.push({ id: i + 1, x, y: 0, z: 0, state: "travel" }));
+    ideas.push({ id: 9, x: -1.9, y: -.7, z: 1.3, state: "killed", vy: 0, vz: 0 });
+    ideas.push({ id: 10, x: .5, y: -1.4, z: -1.5, state: "killed", vy: 0, vz: 0 });
+    ideas.push({ id: 11, arm: ARM_BUILD, t: .6, state: "arm", ch: "◆" });
+    ideas.push({ id: 11, arm: ARM_BUY, t: .55, state: "arm", ch: "◇" });
+    ideas.push({ id: 11, arm: ARM_BUY, t: .35, state: "arm", ch: "◇" });
+    inCount = 7; shipped = 1;
+    counterEl.textContent = `IN ${inCount} / SHIPPED ${shipped}`;
+    draw();
+  }
+
+  gateStage.addEventListener("pointerdown", (e) => {
+    if (e.target.closest("button, a")) return;
+    e.preventDefault();
+    dragging = true; pointer = { x: e.clientX, y: e.clientY };
+    try { gateStage.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  gateStage.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    targetY += (e.clientX - pointer.x) * .008;
+    targetX += (e.clientY - pointer.y) * .006;
+    pointer = { x: e.clientX, y: e.clientY };
+    if (reducedMotion) { rotX = targetX; rotY = targetY; draw(); }
+  });
+  gateStage.addEventListener("pointerup", () => { dragging = false; });
+  gateStage.addEventListener("pointercancel", () => { dragging = false; });
+
+  const glossEl = document.querySelector("#gate-gloss");
+  const panelEl = document.querySelector("#gate-panel");
+  function selectGate(button, focus) {
+    view = button.dataset.gate;
+    gateButtons.forEach((c) => {
+      const on = c === button;
+      c.setAttribute("aria-selected", String(on));
+      c.tabIndex = on ? 0 : -1;
+    });
+    panelEl.setAttribute("aria-labelledby", button.id);
+    readoutEl.textContent = views[view].readout;
+    questionsEl.innerHTML = views[view].questions.map((q) => `<li>${q}</li>`).join("");
+    glossEl.textContent = views[view].gloss;
+    if (focus) button.focus();
+    draw();
+  }
+  gateButtons.forEach((button, index) => {
+    button.addEventListener("click", () => selectGate(button, false));
+    button.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      let next = index;
+      if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = gateButtons.length - 1;
+      else next = (index + (["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : -1) + gateButtons.length) % gateButtons.length;
+      selectGate(gateButtons[next], true);
+    });
+  });
+
+  const io = new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    cancelAnimationFrame(frame);
+    if (visible) { lastTime = 0; if (reducedMotion) staticScene(); else frame = requestAnimationFrame(animate); }
+  }, { threshold: .01 });
+  io.observe(gateStage);
+  document.addEventListener("visibilitychange", () => {
+    cancelAnimationFrame(frame);
+    if (!document.hidden && visible && !reducedMotion) { lastTime = 0; frame = requestAnimationFrame(animate); }
+  });
+  window.addEventListener("resize", draw);
+  if (reducedMotion) staticScene(); else draw();
+})();
+
+/* ---------------------------------------------------------------------------
    Liquid inversion field
    A mercury-like mass of connected fluid nodes trails the pointer on a fixed
    full-viewport canvas. Each node is a lobed opaque polygon; consecutive nodes
@@ -998,4 +1254,5 @@ drawKitchen();
 
   bind(document.querySelector(".ascii-volume"));
   bind(document.querySelector(".kitchen-model-shell"));
+  bind(document.querySelector(".gate-stage"));
 })();

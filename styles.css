@@ -430,6 +430,24 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 .section-tag::before { content: "// "; }
 .tagline { color: var(--black); font-style: italic; }
 
+.method { padding: clamp(3.5rem, 7vw, 6rem) var(--pad); background: var(--white); color: var(--black); border-bottom: 1px solid var(--black); }
+.method .section-head { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.method .section-head h2 { max-width: 18ch; }
+/* Decision pipeline: four tabs, the questions in display type, the 3D corridor
+   as supporting visual. Reuses the explorer tab grammar. */
+.route-tabs.gate-tabs { grid-template-columns: repeat(4, 1fr); }
+.gate-panel { display: grid; grid-template-columns: 1.05fr .95fr; min-height: 26rem; }
+.gate-text { display: flex; flex-direction: column; padding: clamp(1.5rem, 3vw, 3rem); border-right: 1px solid var(--black); }
+.gate-big { margin: 0 0 auto; padding: 0; list-style: none; counter-reset: gate; }
+.gate-big li { position: relative; max-width: 16ch; margin-bottom: clamp(1rem, 2vw, 1.6rem); padding-left: 2.6rem; font-family: var(--display); font-size: clamp(1.55rem, 2.7vw, 2.7rem); font-weight: 400; line-height: 1; letter-spacing: -.02em; text-transform: uppercase; text-wrap: balance; }
+.gate-big li::before { counter-increment: gate; content: counter(gate, decimal-leading-zero); position: absolute; left: 0; top: .2em; font-family: var(--mono); font-size: .72rem; font-weight: 800; letter-spacing: .04em; }
+.gate-gloss { max-width: 44ch; margin: 1.5rem 0 0; padding-top: 1.2rem; border-top: 1px solid var(--black); color: var(--dim-light); }
+.gate-stage { position: relative; min-height: 26rem; background: var(--black); color: var(--white); overflow: hidden; cursor: none; -webkit-user-select: none; user-select: none; touch-action: none; }
+#gate-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.gate-status { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; gap: 1rem; padding: .65rem .8rem; border-bottom: 1px solid var(--white); background: var(--black); font-family: var(--mono); font-size: .6rem; font-weight: 700; letter-spacing: .04em; }
+.method-close { max-width: 26ch; margin: clamp(2.5rem, 5vw, 4rem) 0 0; font-family: var(--display); font-size: clamp(1.9rem, 3.6vw, 3.6rem); font-weight: 400; line-height: .98; letter-spacing: -.03em; text-transform: uppercase; text-wrap: balance; }
+.method-close strong { font-weight: inherit; color: transparent; -webkit-text-stroke: 1.5px var(--black); }
+
 .about { padding: clamp(3.5rem, 7vw, 6rem) var(--pad); background: var(--off); color: var(--black); border-bottom: 1px solid var(--black); }
 .about-lead { display: grid; grid-template-columns: 1.35fr .65fr; gap: clamp(2rem, 5vw, 5rem); align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
 .about-lead h2 { max-width: 14ch; margin: 0; font-family: var(--display); font-size: clamp(2.75rem, 6vw, 5.75rem); font-weight: 400; line-height: .92; letter-spacing: -.04em; text-transform: uppercase; }
@@ -665,6 +683,7 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
   .volume-copy { width: 55%; }
   .mesh-controls { width: 44%; }
   .route-tabs { display: flex; overflow-x: auto; }
+  .gate-tabs button { flex: 0 0 12rem; }
   .route-tabs button { flex: 0 0 11rem; border-bottom: 0; }
   .system-panel { grid-template-columns: 1fr; }
   .system-copy { border-right: 0; border-bottom: 1px solid var(--black); }
@@ -687,6 +706,9 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
   .skill-axes button:nth-child(even) { border-right: 0; }
   .skill-axes button:nth-child(n+3) { border-bottom: 0; }
   .kitchen-model-shell { min-height: 36rem; }
+  .gate-panel { grid-template-columns: 1fr; }
+  .gate-text { border-right: 0; border-bottom: 1px solid var(--black); }
+  .gate-stage { min-height: 22rem; }
   .kitchen-model-copy { width: 55%; }
   .kitchen-controls { width: 44%; }
   .rescue-diff { grid-template-columns: 1fr 1fr; }
@@ -698,7 +720,7 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 
 @media (max-width: 640px) {
   :root { --pad: 1rem; }
-  .about, .moltmesh-section, .kitchen-cluster, .system-explorer, .pingerchips-case, .maplify-case, .mimir-case, .skills-section, .ledger, .history, .contact { padding-top: 3rem; padding-bottom: 3rem; }
+  .about, .method, .moltmesh-section, .kitchen-cluster, .system-explorer, .pingerchips-case, .maplify-case, .mimir-case, .skills-section, .ledger, .history, .contact { padding-top: 3rem; padding-bottom: 3rem; }
   .field-notes { padding-top: 3rem; padding-bottom: 3rem; }
   .identity-rail nav a { min-width: 4.4rem; padding: 0 .6rem; font-size: .54rem; }
   .hero { padding-top: 1rem; }
@@ -744,6 +766,9 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
   .skill-axes button, .skill-axes button:nth-child(even), .skill-axes button:nth-child(n+3) { min-height: 12rem; border-right: 0; border-bottom: 1px solid var(--black); }
   .skill-axes button:last-child { border-bottom: 0; }
   .kitchen-model-shell { min-height: 33rem; }
+  .gate-stage { min-height: 19rem; }
+  .gate-big li { font-size: clamp(1.35rem, 6.5vw, 2rem); max-width: none; }
+  .method-close { font-size: clamp(1.6rem, 8vw, 2.6rem); }
   .kitchen-model-status { align-items: flex-start; flex-direction: column; }
   .kitchen-model-copy { top: 5rem; width: calc(100% - 1.6rem); }
   .kitchen-controls { left: .6rem; right: .6rem; bottom: .6rem; width: auto; grid-template-columns: 1fr 1fr; }
