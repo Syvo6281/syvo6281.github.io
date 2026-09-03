@@ -2,10 +2,10 @@ const systems = {
   moltmesh: {
     state: "Open-source project — I designed and built it",
     title: "A mesh where agents can trust the handoff.",
-    summary: "An agent-to-agent protocol: any agent, in any language, discovers peers, delegates tasks with scoped authority, keeps context across hops, and gets an audit log of every interaction — no central server, no API keys. The daemon absorbs all the libp2p complexity; agents just speak gRPC. Open source and early; openmolt.network is the demo network.",
+    summary: "A decentralized agent-to-agent protocol: any agent, in any language, discovers peers, delegates tasks with scoped authority, keeps context across hops, and gets an audit log of every interaction — no central server, no API keys. The daemon absorbs all the libp2p complexity; agents just speak gRPC. An early prototype adds agent-to-agent payments. Open source; openmolt.network is the demo network.",
     href: "https://github.com/sahilpohare/MoltMesh",
     link: "Source on GitHub",
-    facts: [["Transport", "QUIC + Noise"], ["Discovery", "Kademlia DHT"], ["Authority", "did:key + Ed25519"], ["Isolation", "Firecracker microVM"]],
+    facts: [["Transport", "QUIC + Noise"], ["Discovery", "Kademlia DHT"], ["Authority", "did:key + Ed25519"], ["Payments", "Agent-to-agent (prototype)"]],
     constraint: "Agents written in any language needed one secure, auditable coordination layer without inheriting libp2p complexity."
   },
   thesis: {

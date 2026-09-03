@@ -51,33 +51,6 @@
           <p>I'm Sahil Pohare. I've founded two products — Pingerchips has paying B2B customers — took AiSentr from zero to £500K ARR as employee #1, and built for a YC company. I move fast on almost no money, and I've been early to peer-to-peer AI infrastructure since I was 17.</p>
         </div>
 
-        <div class="ascii-volume" id="moltmesh" aria-labelledby="mesh-title">
-          <canvas id="ascii-mesh" aria-hidden="true"></canvas>
-          <div class="volume-frame" aria-hidden="true"><span>+</span><span>+</span><span>+</span><span>+</span></div>
-          <div class="volume-status">
-            <span id="mesh-title">MOLTMESH — OPEN-SOURCE PROJECT</span>
-            <span id="mesh-readout">ALL_LAYERS / ROTATE_TO_INSPECT</span>
-          </div>
-          <div class="volume-copy">
-            <p id="mesh-description"><b>MoltMesh is an open-source agent-to-agent protocol I designed and built.</b> AI agents can't safely find and delegate work to agents outside their own platform. MoltMesh lets any agent, in any language, discover peers, hand off tasks, and stream results back — no central server, no API keys. It's open source and early; <code>openmolt.network</code> is the demo network.</p>
-            <p class="volume-instruction">Drag or move to rotate. Select a layer to isolate its role.</p>
-          </div>
-          <div class="mesh-controls" role="group" aria-label="Explore MoltMesh protocol layers">
-            <button type="button" class="is-active" data-mesh-focus="all" aria-pressed="true"><span>00</span> All layers</button>
-            <button type="button" data-mesh-focus="identity" aria-pressed="false"><span>01</span> Signed identity</button>
-            <button type="button" data-mesh-focus="delegation" aria-pressed="false"><span>02</span> Delegation</button>
-            <button type="button" data-mesh-focus="isolation" aria-pressed="false"><span>03</span> MicroVM isolation</button>
-            <button type="button" data-mesh-focus="consensus" aria-pressed="false"><span>04</span> Replicated log</button>
-          </div>
-          <div class="stage-foot">
-            <p>Any agent. Any framework. No central server. No API keys.</p>
-            <div class="stage-links">
-              <a href="https://openmolt.network" target="_blank" rel="noreferrer">Demo network <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" /></svg></a>
-              <a href="https://github.com/sahilpohare/MoltMesh" target="_blank" rel="noreferrer">Source on GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" /></svg></a>
-            </div>
-          </div>
-        </div>
-
         <div class="hero-junctions" aria-label="Portfolio entry points">
           <button type="button" data-scroll-to="systems"><span>What I've built</span><b>2 founded · 6 systems</b></button>
           <button type="button" data-scroll-to="experience"><span>Track record</span><b>£500K ARR · $200K+ saved</b></button>
@@ -112,6 +85,41 @@
           <p><b>YC experience</b> Engineer at YC-backed Orange Health Labs (YC20) — growth tooling (+23% acquisition, −25% churn), bucketed search (+15% conversion).</p>
           <p><b>Conference speaker</b> Talked distributed BEAM compute and capability-based routing at Goatmire, Sweden.</p>
           <p><b>Origin</b> Self-taught since nine; started out building games. Run Maplify Tech, a rescue-engineering studio.</p>
+        </div>
+      </section>
+
+      <section class="moltmesh-section" id="moltmesh-feature" aria-labelledby="mesh-heading">
+        <pre class="ascii-banner" aria-hidden="true">+--[ FLAGSHIP ]---- decentralized agent-to-agent protocol + payments ----+</pre>
+        <header class="section-head">
+          <h2 id="mesh-heading">MoltMesh — a decentralized agent-to-agent protocol.</h2>
+          <p>An open-source protocol I designed and built. Any AI agent, in any language, discovers peers and hands off work with no central server and no API keys — the problem the commercial agentic-mesh platforms are now racing to solve. An early prototype adds agent-to-agent payments on top. It's open source and early; <code>openmolt.network</code> is the demo network.</p>
+        </header>
+
+        <div class="ascii-volume" id="moltmesh" aria-labelledby="mesh-title">
+          <canvas id="ascii-mesh" aria-hidden="true"></canvas>
+          <div class="volume-frame" aria-hidden="true"><span>+</span><span>+</span><span>+</span><span>+</span></div>
+          <div class="volume-status">
+            <span id="mesh-title">MOLTMESH — OPEN-SOURCE PROJECT</span>
+            <span id="mesh-readout">ALL_LAYERS / ROTATE_TO_INSPECT</span>
+          </div>
+          <div class="volume-copy">
+            <p id="mesh-description">Rotate the four-node character volume and isolate one layer: signed identity, delegation, microVM isolation, or the replicated log.</p>
+            <p class="volume-instruction">Drag or move to rotate. Select a layer to isolate its role.</p>
+          </div>
+          <div class="mesh-controls" role="group" aria-label="Explore MoltMesh protocol layers">
+            <button type="button" class="is-active" data-mesh-focus="all" aria-pressed="true"><span>00</span> All layers</button>
+            <button type="button" data-mesh-focus="identity" aria-pressed="false"><span>01</span> Signed identity</button>
+            <button type="button" data-mesh-focus="delegation" aria-pressed="false"><span>02</span> Delegation</button>
+            <button type="button" data-mesh-focus="isolation" aria-pressed="false"><span>03</span> MicroVM isolation</button>
+            <button type="button" data-mesh-focus="consensus" aria-pressed="false"><span>04</span> Replicated log</button>
+          </div>
+          <div class="stage-foot">
+            <p>Any agent. Any framework. No central server. No API keys.</p>
+            <div class="stage-links">
+              <a href="https://openmolt.network" target="_blank" rel="noreferrer">Demo network <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" /></svg></a>
+              <a href="https://github.com/sahilpohare/MoltMesh" target="_blank" rel="noreferrer">Source on GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" /></svg></a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -158,7 +166,7 @@
         <div class="explorer-shell">
           <div class="route-tabs" role="tablist" aria-label="Flagship systems">
             <button id="tab-moltmesh" role="tab" aria-selected="true" aria-controls="panel-system" data-system="moltmesh">
-              <span class="route-swatch swatch-yellow"></span><b>MoltMesh</b><small>Agent-to-agent protocol</small>
+              <span class="route-swatch swatch-yellow"></span><b>MoltMesh</b><small>Decentralized A2A protocol</small>
             </button>
             <button id="tab-thesis" role="tab" aria-selected="false" aria-controls="panel-system" data-system="thesis" tabindex="-1">
               <span class="route-swatch swatch-blue"></span><b>BEAM Mesh</b><small>Capability routing</small>
@@ -179,16 +187,16 @@
 
           <article class="system-panel" id="panel-system" role="tabpanel" aria-labelledby="tab-moltmesh" aria-live="polite">
             <div class="system-copy">
-              <p class="system-state" id="system-state">Route open / public repository</p>
+              <p class="system-state" id="system-state">Open-source project — I designed and built it</p>
               <h3 id="system-title">A mesh where agents can trust the handoff.</h3>
-              <p id="system-summary">MoltMesh lets heterogeneous AI agents discover peers, delegate work, exchange context, and stream results without central infrastructure.</p>
-              <a id="system-link" class="text-link" href="https://github.com/sahilpohare/MoltMesh" target="_blank" rel="noreferrer">Open source code <span>↗</span></a>
+              <p id="system-summary">A decentralized agent-to-agent protocol: any agent, in any language, discovers peers, delegates tasks with scoped authority, keeps context across hops, and gets an audit log of every interaction. An early prototype adds agent-to-agent payments.</p>
+              <a id="system-link" class="text-link" href="https://github.com/sahilpohare/MoltMesh" target="_blank" rel="noreferrer">Source on GitHub <span>↗</span></a>
             </div>
             <dl class="system-facts" id="system-facts">
               <div><dt>Transport</dt><dd>QUIC + Noise</dd></div>
               <div><dt>Discovery</dt><dd>Kademlia DHT</dd></div>
               <div><dt>Authority</dt><dd>did:key + Ed25519</dd></div>
-              <div><dt>Isolation</dt><dd>Firecracker microVM</dd></div>
+              <div><dt>Payments</dt><dd>Agent-to-agent (prototype)</dd></div>
             </dl>
             <div class="decision-line">
               <span>Constraint</span>

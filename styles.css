@@ -176,7 +176,7 @@ svg { display: block; }
 .rail-contact path, .stage-foot path, .contact path { fill: none; stroke: currentColor; stroke-width: 2; }
 
 main { min-width: 0; margin-left: var(--rail); overflow: clip; }
-.hero { min-width: 0; min-height: 100vh; padding: 1.2rem var(--pad) var(--pad); background: var(--black); color: var(--white); overflow: hidden; }
+.hero { min-width: 0; padding: 1.2rem var(--pad) clamp(3rem, 8vh, 6rem); background: var(--black); color: var(--white); overflow: hidden; }
 .hero-topline {
   display: flex;
   justify-content: space-between;
@@ -218,7 +218,12 @@ h1 {
   text-transform: uppercase;
 }
 h1 strong { font-weight: inherit; color: transparent; -webkit-text-stroke: 1.5px var(--white); }
-.hero-copy > p { max-width: 30rem; margin-bottom: .15rem; color: var(--dim-dark); font-size: clamp(1rem, 1.3vw, 1.18rem); }
+.hero-copy > p { max-width: 34rem; margin-bottom: .15rem; color: var(--dim-dark); font-size: clamp(1rem, 1.3vw, 1.18rem); }
+
+.moltmesh-section { padding: clamp(3.5rem, 7vw, 6rem) var(--pad); background: var(--black); color: var(--white); border-top: 1px solid var(--white); }
+.moltmesh-section .section-head { margin-bottom: clamp(2rem, 4vw, 3rem); }
+.moltmesh-section .section-head h2 { color: var(--white); }
+.moltmesh-section .section-head p { color: var(--dim-dark); }
 
 .ascii-volume {
   position: relative;
@@ -636,7 +641,7 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 
 @media (max-width: 640px) {
   :root { --pad: 1rem; }
-  .about, .kitchen-cluster, .system-explorer, .pingerchips-case, .maplify-case, .mimir-case, .skills-section, .ledger, .history, .contact { padding-top: 3rem; padding-bottom: 3rem; }
+  .about, .moltmesh-section, .kitchen-cluster, .system-explorer, .pingerchips-case, .maplify-case, .mimir-case, .skills-section, .ledger, .history, .contact { padding-top: 3rem; padding-bottom: 3rem; }
   .field-notes { padding-top: 3rem; padding-bottom: 3rem; }
   .identity-rail nav a { min-width: 4.4rem; padding: 0 .6rem; font-size: .54rem; }
   .hero { padding-top: 1rem; }
