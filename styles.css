@@ -218,7 +218,15 @@ h1 {
   text-transform: uppercase;
 }
 h1 strong { font-weight: inherit; color: transparent; -webkit-text-stroke: 1.5px var(--white); }
-.hero-copy > p { max-width: 34rem; margin-bottom: .15rem; color: var(--dim-dark); font-size: clamp(1rem, 1.3vw, 1.18rem); }
+.hero-sub {
+  max-width: 30rem;
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.55;
+  text-wrap: balance;
+}
 
 .moltmesh-section { padding: clamp(3.5rem, 7vw, 6rem) var(--pad); background: var(--black); color: var(--white); border-top: 1px solid var(--white); }
 .moltmesh-section .section-head { margin-bottom: clamp(2rem, 4vw, 3rem); }
@@ -325,6 +333,55 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 .stage-links a { padding: .55rem .75rem; border: 1px solid var(--white); text-decoration: none; }
 .stage-links a:hover { background: var(--white); color: var(--black); }
 .stage-foot svg { width: 1rem; }
+
+/* Hero shipping log — a live tail of real milestones, proving velocity in
+   the page's own terminal grammar. Types each line, then loops. */
+.ship-log {
+  position: relative;
+  z-index: 3;
+  margin-top: clamp(1.5rem, 4vh, 3rem);
+  border: 1px solid var(--white);
+  background: var(--black);
+  font-family: var(--mono);
+}
+.ship-log-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .55rem .8rem;
+  border-bottom: 1px solid var(--white);
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--dim-dark);
+}
+.ship-log-lines {
+  margin: 0;
+  padding: .8rem .85rem;
+  list-style: none;
+  font-size: clamp(.6rem, .95vw, .8rem);
+  line-height: 1.75;
+}
+.ship-log-lines li {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--dim-dark);
+}
+.ship-log-lines li:first-child { color: var(--white); }
+.ship-log-lines li::before { content: "› "; color: var(--white); }
+.ship-log-lines li .ship-caret {
+  display: inline-block;
+  width: .5em;
+  height: 1em;
+  margin-left: .12em;
+  vertical-align: -.14em;
+  background: var(--white);
+  animation: blink 1.05s steps(1) infinite;
+}
+.ship-log-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 .hero-junctions { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 1px solid var(--white); border-top: 0; }
 .hero-junctions > * {
@@ -652,6 +709,7 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
   h1 { width: 100%; max-width: 100%; font-size: clamp(2.1rem, 8.5vw, 3rem); overflow-wrap: anywhere; }
   .kitchen-lead h2 { width: 100%; max-width: 100%; font-size: clamp(2.2rem, 9.5vw, 3.4rem); overflow-wrap: anywhere; }
   .hero-copy > p, .volume-status span { max-width: 100%; overflow-wrap: anywhere; }
+  .ship-log-lines { font-size: .5rem; line-height: 1.95; padding: .7rem .55rem; }
   .ascii-volume { min-height: 34rem; }
   .volume-status { align-items: flex-start; flex-direction: column; }
   .volume-status span:last-child { color: var(--dim-dark); }

@@ -123,6 +123,66 @@ const routeObserver = new IntersectionObserver((entries) => {
 }, { rootMargin: "-30% 0px -55%", threshold: [0.05, 0.25, 0.5] });
 sections.forEach((section) => routeObserver.observe(section));
 
+/* ---------------------------------------------------------------------------
+   Hero shipping log
+   Prints every milestone into ~/ship.log with a quick per-line reveal, then
+   stops — a caret rides the line being written and disappears at the end.
+   No loop. All lines are always in the DOM (sized to content, no empty box);
+   the animation only unhides them. Reduced motion / hidden tab: shown at once.
+--------------------------------------------------------------------------- */
+(() => {
+  const list = document.querySelector("#ship-log-lines");
+  if (!list) return;
+  const rm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const entries = [
+    "now      lightwork-ai   shipping production voice agents",
+    "2026     moltmesh       decentralized agent-to-agent protocol",
+    "2025     skyfern        founded -> 150+ user interviews",
+    "2025     kitchen-k8s    prod on a home node -> $8K/mo saved",
+    "2024-25  aisentr        0 -> £500K ARR   [employee #1]",
+    "2024     pingerchips    founded -> 5 B2B customers",
+    "2023     orange-health  YC20 -> +23% acquisition, -25% churn",
+    "2022     bot.space      db cost -6K/mo -> -2K/mo  (-70%)",
+    "2021     mimir          p2p compute + LLM  [age 17]",
+  ];
+
+  // Build every line up front so the panel holds its final height immediately.
+  const nodes = entries.map((text) => {
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    span.className = "ship-text";
+    span.textContent = text;
+    li.appendChild(span);
+    list.appendChild(li);
+    return { li, span, text };
+  });
+
+  if (rm || document.hidden) return; // already fully rendered
+
+  // Hide, then reveal line by line.
+  nodes.forEach((n) => { n.li.style.visibility = "hidden"; });
+  let i = 0;
+  let caret = null;
+
+  function reveal() {
+    if (caret) caret.remove();
+    if (i >= nodes.length) return;
+    const n = nodes[i];
+    n.li.style.visibility = "visible";
+    caret = document.createElement("span");
+    caret.className = "ship-caret";
+    n.li.appendChild(caret);
+    i += 1;
+    setTimeout(reveal, 140 + Math.random() * 90); // whole log in ~1.6s
+  }
+  // start once the hero is on screen
+  const io = new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) { io.disconnect(); reveal(); }
+  }, { threshold: 0.1 });
+  io.observe(list);
+})();
+
 const canvas = document.querySelector("#ascii-mesh");
 const volume = document.querySelector(".ascii-volume");
 const context = canvas.getContext("2d", { alpha: false });
