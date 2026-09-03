@@ -778,13 +778,13 @@ drawKitchen();
         "<em>Do I know</em> <b>who buys this week</b><em>, and will they?</em>"
       ],
       gloss: "Not a launch. A sale, within a week, to someone I already know. Answered with data, not assumptions." },
-    split:    { readout: "Gate 04 / Pragmatism",
+    split:    { readout: "Gate 04 / Build vs buy",
       questions: [
         "<b>What business are we in</b><em>?</em>",
-        "<b>Is this ours to build</b><em>, or does someone else already do it better?</em>",
-        "<b>What's good enough</b> <em>for the scale we actually have?</em>"
+        "<b>Build ours, buy the rest</b><em> \u2014 someone else does it better.</em>",
+        "<em>Would you rather depend on a product that's</em> <b>legally required to work</b><em>, or the one you vibe-coded over a weekend?</em>"
       ],
-      gloss: "Selling UX agents doesn't put us in the analytics, data-pipeline, or sandbox-isolation business. Someone else does those better, and their product is legally required to work. The same discipline applies to scale: build for the users you have." }
+      gloss: "Selling UX agents doesn't put us in the analytics, data-pipeline, or sandbox-isolation business. \"But AI makes building easy\" \u2014 sure, and a vendor carries the liability for their product working. Yours doesn't." }
   };
 
   let view = "problem";
