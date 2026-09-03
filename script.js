@@ -784,8 +784,7 @@ drawKitchen();
         "<b>Is this ours to build</b><em>, or does someone else already do it better?</em>",
         "<b>What's good enough</b> <em>for the scale we actually have?</em>"
       ],
-      gloss: "Selling UX agents doesn't put us in the analytics, data-pipeline, or sandbox-isolation business. Someone else does those better, and their product is legally required to work. The same discipline applies to scale: build for the users you have.",
-      quote: "Sure, this won't scale to a million users. It's not Kafka \u2014 we're running a small serverless function. But we don't have a million users, and the day we do, that's a good problem to have." }
+      gloss: "Selling UX agents doesn't put us in the analytics, data-pipeline, or sandbox-isolation business. Someone else does those better, and their product is legally required to work. The same discipline applies to scale: build for the users you have." }
   };
 
   let view = "problem";
@@ -965,7 +964,6 @@ drawKitchen();
   gateStage.addEventListener("pointercancel", () => { dragging = false; });
 
   const glossEl = document.querySelector("#gate-gloss");
-  const quoteEl = document.querySelector("#gate-quote");
   const panelEl = document.querySelector("#gate-panel");
   function selectGate(button, focus) {
     view = button.dataset.gate;
@@ -978,9 +976,6 @@ drawKitchen();
     readoutEl.textContent = views[view].readout;
     questionsEl.innerHTML = views[view].questions.map((q) => `<li>${q}</li>`).join("");
     glossEl.textContent = views[view].gloss;
-    const q = views[view].quote;
-    quoteEl.textContent = q || "";
-    quoteEl.hidden = !q;
     if (focus) button.focus();
     draw();
   }
@@ -993,15 +988,10 @@ drawKitchen();
     textEl.parentNode.appendChild(probe);
     const list = probe.querySelector("#gate-questions");
     const gloss = probe.querySelector("#gate-gloss");
-    const quote = probe.querySelector("#gate-quote");
     let tallest = 0;
     Object.values(views).forEach((v) => {
       list.innerHTML = v.questions.map((q) => `<li>${q}</li>`).join("");
       gloss.textContent = v.gloss;
-      if (quote) {
-        quote.textContent = v.quote || "";
-        quote.hidden = !v.quote;
-      }
       tallest = Math.max(tallest, probe.scrollHeight);
     });
     probe.remove();

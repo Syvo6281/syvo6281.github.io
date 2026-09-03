@@ -444,13 +444,14 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 .gate-big em { font-family: var(--body); font-style: normal; font-weight: 300; color: var(--dim-light); }
 .gate-big li::before { counter-increment: gate; content: counter(gate, decimal-leading-zero); position: absolute; left: 0; top: .2em; font-family: var(--mono); font-size: .72rem; font-weight: 800; letter-spacing: .04em; }
 .gate-gloss { max-width: 44ch; margin: 1.5rem 0 0; padding-top: 1.2rem; border-top: 1px solid var(--black); color: var(--dim-light); }
-.gate-quote { max-width: 46ch; margin: 1.2rem 0 0; padding-left: 1.1rem; border-left: 1px solid var(--black); font-family: var(--mono); font-size: .72rem; line-height: 1.75; color: var(--black); }
-.gate-quote::before { content: "\201C"; }
-.gate-quote::after { content: "\201D"; }
 .gate-stage { position: relative; min-height: 26rem; background: var(--black); color: var(--white); overflow: hidden; cursor: none; -webkit-user-select: none; user-select: none; touch-action: none; }
 #gate-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .gate-status { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; gap: 1rem; padding: .65rem .8rem; border-bottom: 1px solid var(--white); background: var(--black); font-family: var(--mono); font-size: .6rem; font-weight: 700; letter-spacing: .04em; }
-.method-close { max-width: 26ch; margin: clamp(2.5rem, 5vw, 4rem) 0 0; font-family: var(--display); font-size: clamp(1.9rem, 3.6vw, 3.6rem); font-weight: 400; line-height: .98; letter-spacing: -.03em; text-transform: uppercase; text-wrap: balance; }
+.method-closers { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: start; margin-top: clamp(2.5rem, 5vw, 4rem); padding-top: clamp(2rem, 4vw, 3rem); border-top: 1px solid var(--black); }
+.method-quote { max-width: 44ch; margin: .35rem 0 0; padding-left: 1.2rem; border-left: 1px solid var(--black); font-size: 1.05rem; line-height: 1.6; color: var(--dim-light); }
+.method-quote::before { content: "\201C"; }
+.method-quote::after { content: "\201D"; }
+.method-close { max-width: 26ch; margin: 0; font-family: var(--display); font-size: clamp(1.9rem, 3.6vw, 3.6rem); font-weight: 400; line-height: .98; letter-spacing: -.03em; text-transform: uppercase; text-wrap: balance; }
 .method-close strong { font-weight: inherit; color: transparent; -webkit-text-stroke: 1.5px var(--black); }
 
 .about { padding: clamp(3.5rem, 7vw, 6rem) var(--pad); background: var(--off); color: var(--black); border-bottom: 1px solid var(--black); }
@@ -773,6 +774,7 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
   .kitchen-model-shell { min-height: 33rem; }
   .gate-stage { min-height: 19rem; }
   .gate-big li { font-size: clamp(1.35rem, 6.5vw, 2rem); max-width: none; }
+  .method-closers { grid-template-columns: 1fr; gap: 1.6rem; }
   .method-close { font-size: clamp(1.6rem, 8vw, 2.6rem); }
   .kitchen-model-status { align-items: flex-start; flex-direction: column; }
   .kitchen-model-copy { top: 5rem; width: calc(100% - 1.6rem); }
