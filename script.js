@@ -759,10 +759,30 @@ drawKitchen();
   const SPAWN_X = -4.5;
 
   const views = {
-    problem:  { readout: "Gate 01 / Problem", questions: ["<em>What</em> <b>problem</b> <em>are we</em> <b>solving</b><em>?</em>", "<b>Who</b> <em>are we solving it for, and how</em> <b>big</b> <em>is the</em> <b>problem</b><em>?</em>"], gloss: "If I can't name the problem and the person who has it, nothing after this matters." },
-    solution: { readout: "Gate 02 / Solution", questions: ["What's the current process, and how does our solution improve it?", "What does the solution actually look like?"], gloss: "Compared to what they do today. If it isn't clearly better, it's a feature, not a product." },
-    sale:     { readout: "Gate 03 / Sale", questions: ["What's the minimum work needed to make the first sale?", "Do I know people who can and will buy this MVP within a week?"], gloss: "Not a launch. A sale, within a week, to someone I already know. Answered with data, not assumptions." },
-    split:    { readout: "Gate 04 / Build or buy", questions: ["What business are we in?", "Build only what's ours. Buy the rest."], gloss: "Selling UX agents doesn't put us in the analytics, data-pipeline, or sandbox-isolation business. Someone else does that better, and their product is legally required to work." }
+    problem:  { readout: "Gate 01 / Problem",
+      questions: [
+        "<b>What problem</b> <em>are we solving?</em>",
+        "<em>Who are we solving it for, and</em> <b>how big</b> <em>is the problem?</em>"
+      ],
+      gloss: "If I can't name the problem and the person who has it, nothing after this matters." },
+    solution: { readout: "Gate 02 / Solution",
+      questions: [
+        "<em>What's the current process, and how is this</em> <b>better than what they do now</b><em>?</em>",
+        "<em>What does the</em> <b>solution actually look like</b><em>?</em>"
+      ],
+      gloss: "Compared to what they do today. If it isn't clearly better, it's a feature, not a product." },
+    sale:     { readout: "Gate 03 / Sale",
+      questions: [
+        "<em>What's the</em> <b>least work to a first sale</b><em>?</em>",
+        "<em>Do I know</em> <b>who buys this week</b><em>, and will they?</em>"
+      ],
+      gloss: "Not a launch. A sale, within a week, to someone I already know. Answered with data, not assumptions." },
+    split:    { readout: "Gate 04 / Build or buy",
+      questions: [
+        "<b>What business are we in</b><em>?</em>",
+        "<b>Build ours, buy the rest</b><em> \u2014 someone else does it better.</em>"
+      ],
+      gloss: "Selling UX agents doesn't put us in the analytics, data-pipeline, or sandbox-isolation business. Someone else does that better, and their product is legally required to work." }
   };
 
   let view = "problem";
