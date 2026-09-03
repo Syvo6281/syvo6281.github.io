@@ -444,6 +444,9 @@ body.field-dragging, body.field-dragging * { cursor: none !important; }
 .gate-big em { font-family: var(--body); font-style: normal; font-weight: 300; color: var(--dim-light); }
 .gate-big li::before { counter-increment: gate; content: counter(gate, decimal-leading-zero); position: absolute; left: 0; top: .2em; font-family: var(--mono); font-size: .72rem; font-weight: 800; letter-spacing: .04em; }
 .gate-gloss { max-width: 44ch; margin: 1.5rem 0 0; padding-top: 1.2rem; border-top: 1px solid var(--black); color: var(--dim-light); }
+.gate-quote { max-width: 46ch; margin: 1.2rem 0 0; padding-left: 1.1rem; border-left: 1px solid var(--black); font-family: var(--mono); font-size: .72rem; line-height: 1.75; color: var(--black); }
+.gate-quote::before { content: "\201C"; }
+.gate-quote::after { content: "\201D"; }
 .gate-stage { position: relative; min-height: 26rem; background: var(--black); color: var(--white); overflow: hidden; cursor: none; -webkit-user-select: none; user-select: none; touch-action: none; }
 #gate-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .gate-status { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; gap: 1rem; padding: .65rem .8rem; border-bottom: 1px solid var(--white); background: var(--black); font-family: var(--mono); font-size: .6rem; font-weight: 700; letter-spacing: .04em; }
