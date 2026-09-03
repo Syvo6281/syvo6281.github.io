@@ -957,6 +957,27 @@ drawKitchen();
     if (focus) button.focus();
     draw();
   }
+  // Lock the panel to the tallest tab so switching never shifts the layout below.
+  const textEl = document.querySelector(".gate-text");
+  function lockPanelHeight() {
+    const probe = textEl.cloneNode(true);
+    probe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none;height:auto;min-height:0;top:0;left:0;";
+    probe.style.width = `${textEl.getBoundingClientRect().width}px`;
+    textEl.parentNode.appendChild(probe);
+    const list = probe.querySelector("#gate-questions");
+    const gloss = probe.querySelector("#gate-gloss");
+    let tallest = 0;
+    Object.values(views).forEach((v) => {
+      list.innerHTML = v.questions.map((q) => `<li>${q}</li>`).join("");
+      gloss.textContent = v.gloss;
+      tallest = Math.max(tallest, probe.scrollHeight);
+    });
+    probe.remove();
+    panelEl.style.minHeight = `${Math.ceil(tallest)}px`;
+  }
+  lockPanelHeight();
+  window.addEventListener("resize", lockPanelHeight);
+
   gateButtons.forEach((button, index) => {
     button.addEventListener("click", () => selectGate(button, false));
     button.addEventListener("keydown", (event) => {
